@@ -1,0 +1,7 @@
+{
+  "min": "Field \"{field}\" must not be less than {value}.",
+  "max": "Field \"{field}\" must not be more than {value}.",
+  "isInt": "Field \"{field}\" must be  as integer.",
+  "isMultiRequired": "Field \"{field}\" must be populated in all languages.",
+  "isPartialMultiRequired": "Field \"{field}\" must be filled in at least one language."
+}

@@ -1,0 +1,33 @@
+version: '3.9'
+services:
+  web:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    volumes:
+      - .:/app
+      - ./app/node_modules
+
+    env_file: .env
+    environment:
+      - AWS_ID:${AWS_ID}
+      - AWS_SECRET:${AWS_SECRET}
+      - S3_REGION:${S3_REGION}
+      - S3_BUCKET:${S3_BUCKET}
+    networks:
+      - host
+    ports:
+      - '3000:3000'
+    depends_on:
+      - mongodb
+    command: npm run dev
+  mongodb:
+    image: mongo:latest
+    ports:
+      - '27017:27017'
+    networks:
+      - host
+    volumes:
+      - .:/app/mongodb
+networks:
+  host:
