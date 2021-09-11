@@ -1,14 +1,12 @@
-import { ModelLanguage } from "@models/language.model";
 import { ApiProperty } from "@nestjs/swagger";
-import { PromotionsDocument } from "@schemas/promotions.schema";
 
-export class ModelPromotion implements Partial<PromotionsDocument> {
+export class ModelPublicPromotion {
     @ApiProperty({ required: false, type: String, readOnly: true })
     id: string;
-    @ApiProperty({ required: true, type: ModelLanguage, default: new ModelLanguage() })
-    name: ModelLanguage;
-    @ApiProperty({ required: true, type: ModelLanguage, default: null })
-    description: ModelLanguage;
+    @ApiProperty({ required: true, type: String, default: null })
+    name: string;
+    @ApiProperty({ required: true, type: String, default: null })
+    description: string;
     @ApiProperty({ type: String, default: null })
     image: string;
     @ApiProperty({ type: Boolean, default: false })
@@ -32,7 +30,7 @@ export class ModelPromotion implements Partial<PromotionsDocument> {
         endedAt = null,
         updatedAt = null,
         createdAt = null
-    }: Partial<PromotionsDocument> = {}) {
+    }) {
         this.id = _id;
         this.name = name;
         this.description = description;

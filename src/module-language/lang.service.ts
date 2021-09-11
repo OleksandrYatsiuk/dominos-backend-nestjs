@@ -15,4 +15,8 @@ export class LangService {
         this._lang = lang;
     }
 
+    getValue(data: any): any {
+        return data[this.getLang()];
+    }
+
 }

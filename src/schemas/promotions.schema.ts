@@ -1,8 +1,9 @@
+import { ModelLanguage } from '@models/language.model';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 
 
-export type PromotionsDocument = Promotions & mongoose.Document;
+export type PromotionsDocument = Promotions & mongoose.Document & { _doc: Promotions };
 
 @Schema({ versionKey: false })
 export class Promotions {
@@ -11,19 +12,16 @@ export class Promotions {
     readonly id: mongoose.Types.ObjectId;
 
     @Prop({ default: null, required: true })
-    title: string;
+    name: ModelLanguage;
 
     @Prop({ default: null, required: true })
-    description: string;
+    description: ModelLanguage;
 
     @Prop({ default: null })
     image: string;
 
-    @Prop({ default: null })
-    price: string;
-
-    @Prop({ default: 0 })
-    status: number;
+    @Prop({ default: false })
+    isActive: boolean;
 
     @Prop({ default: null })
     startedAt: Date;
@@ -31,11 +29,11 @@ export class Promotions {
     @Prop({ default: null })
     endedAt: Date;
 
-    @Prop({ default: Date.now() })
-    createdAt: number;
+    @Prop({ default: Date })
+    createdAt: Date;
 
-    @Prop({ default: Date.now() })
-    updatedAt: number;
+    @Prop({ default: Date })
+    updatedAt: Date;
 }
 
 export const PromotionsSchema = SchemaFactory.createForClass(Promotions);

@@ -51,13 +51,18 @@ export class PizzasService {
       total: await this._db.estimatedDocumentCount({}) || 0,
       page: Number(query.page) || 1,
       limit: Number(query.limit) || 20,
-      result: pizzas.map(p => new ModelPizzaPublic({ ...p._doc, name: p._doc.name[this._ls.getLang()] }))
+      result: pizzas.map(p => new ModelPizzaPublic({ ...p._doc, name: this._ls.getValue(p._doc.name) }))
     };
   }
 
 
   findOne(id: string): Promise<PizzaDocument> {
     return this._db.findById(id).exec();
+  }
+
+  async findOnePublic(id: string): Promise<ModelPizzaPublic> {
+    const p = await this._db.findById(id).exec();
+    return new ModelPizzaPublic({ ...p._doc, name: this._ls.getValue(p._doc.name) });
   }
 
   update(id: string, updatePizzaDto: UpdatePizzaDto) {

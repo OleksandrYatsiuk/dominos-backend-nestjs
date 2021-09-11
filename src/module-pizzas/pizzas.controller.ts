@@ -43,7 +43,7 @@ export class PizzasController {
   @Patch(':id')
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('image'))
-  update(@Param('id') id: string, @Body() updatePizzaDto: UpdatePizzaDto, @UploadedFile() image: Express.Multer.File) {
+  update(@Param('id') id: string, @Body() updatePizzaDto: UpdatePizzaDto) {
     return this.pizzasService.update(id, updatePizzaDto);
   }
 

@@ -1,4 +1,8 @@
+import { IsMultiRequired } from "@decorators/validation";
+import { ModelLanguage } from "@models/language.model";
 import { ApiProperty } from "@nestjs/swagger";
+import { Transform } from 'class-transformer';
+
 
 export class CreatePromotionDto {
     @ApiProperty({
@@ -8,46 +12,53 @@ export class CreatePromotionDto {
     })
     readonly id: string;
 
+    @Transform(({ value }) =>  JSON.parse(value))
+    @IsMultiRequired({ each: false })
     @ApiProperty({
         required: true,
-        type: String,
-        default: 'name'
-
+        type: ModelLanguage,
+        default: new ModelLanguage()
     })
-    name: string;
+
+    name: ModelLanguage;
+
+    @Transform(({ value }) =>  JSON.parse(value))
+    @IsMultiRequired({ each: false })
     @ApiProperty({
         required: false,
-        type: String,
-        default: 'description'
+        type: ModelLanguage,
+        default: new ModelLanguage()
     })
-    description: string;
-
-    @ApiProperty({
-        required: false,
-        type: Number,
-
-        default: 0
-    })
-    status: number;
+    description: ModelLanguage;
 
     @ApiProperty({
         required: false,
-        type: Number
+        type: Boolean,
+        default: false
     })
-    price: number;
+    isActive: boolean;
 
-    @ApiProperty({
-        type: Number,
-        required: false,
-        readOnly: true,
-        default: Date.now()
-    })
-    readonly createdAt: number;
+    @ApiProperty({ type: Date, default: null, required: false })
+    startedAt: Date;
+
+    @ApiProperty({ type: Date, default: null, required: false })
+    endedAt: Date;
+
+    @ApiProperty({ required: false, type: String, format: 'binary', default: null })
+    image: string;
+
     @ApiProperty({
         type: Number,
         required: false,
         readOnly: true,
         default: Date.now()
     })
-    readonly updatedAt: number;
+    readonly createdAt: Date;
+    @ApiProperty({
+        type: Number,
+        required: false,
+        readOnly: true,
+        default: Date.now()
+    })
+    readonly updatedAt: Date;
 }
