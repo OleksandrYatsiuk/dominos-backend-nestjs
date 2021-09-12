@@ -1,5 +1,5 @@
 import { PaginatedDto, paginateUtils } from '@models/pagination.model';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { PizzaDocument, Pizza } from '@schemas/pizzas.schema';
 import { AwsS3Service } from '@services/aws.service';
@@ -15,8 +15,9 @@ export class PizzasService {
 
   constructor(
     @InjectModel(Pizza.name) private _db: Model<PizzaDocument>,
+    @Inject(LangService) private _ls: LangService,
     private _s3: AwsS3Service,
-    private _ls: LangService
+
   ) {
 
   }
