@@ -9,7 +9,7 @@ import { useContainer } from 'class-validator';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     cors: {
-      allowedHeaders: 'Content-Type, Authorization, Accept, Origin, Lang'
+      allowedHeaders: 'Content-Type, Authorization, Accept, Origin, lang'
     },
 
   });
