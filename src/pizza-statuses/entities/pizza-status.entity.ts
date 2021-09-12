@@ -6,7 +6,7 @@ import { Transform } from "class-transformer";
 
 export class ModelPizzaStatus implements Partial<PizzaStatusDocument> {
     @ApiProperty({ required: true, type: ModelLanguage, default: new ModelLanguage() })
-    @Transform(({ value }) => JSON.parse(value))
+    @Transform(({ value }) => typeof value === 'object' ? value : JSON.parse(value))
     @IsMultiRequired({ each: false })
     name: ModelLanguage;
 

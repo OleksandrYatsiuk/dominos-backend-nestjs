@@ -10,11 +10,11 @@ export class CreateShopDto {
     id: string
 
     @ApiProperty({ required: true, type: ModelCoords, default: new ModelCoords() })
-    @Transform(({ value }) => JSON.parse(value))
+    @Transform(({ value }) => typeof value === 'object' ? value : JSON.parse(value))
     coords: ModelCoords;
 
     @ApiProperty({ required: true, type: ModelLanguage, default: new ModelLanguage() })
-    @Transform(({ value }) => JSON.parse(value))
+    @Transform(({ value }) => typeof value === 'object' ? value : JSON.parse(value))
     @IsMultiRequired({ each: true })
     address: ModelLanguage;
 

@@ -12,7 +12,7 @@ export class CreatePromotionDto {
     })
     readonly id: string;
 
-    @Transform(({ value }) =>  JSON.parse(value))
+    @Transform(({ value }) => typeof value === 'object' ? value : JSON.parse(value))
     @IsMultiRequired({ each: false })
     @ApiProperty({
         required: true,
@@ -22,7 +22,7 @@ export class CreatePromotionDto {
 
     name: ModelLanguage;
 
-    @Transform(({ value }) =>  JSON.parse(value))
+    @Transform(({ value }) => typeof value === 'object' ? value : JSON.parse(value))
     @IsMultiRequired({ each: false })
     @ApiProperty({
         required: false,

@@ -9,7 +9,7 @@ import * as mongoose from 'mongoose';
 export class CreatePizzaDto {
 
     @ApiProperty({ required: true, type: ModelLanguage, default: new ModelLanguage() })
-    @Transform(({ value }) => JSON.parse(value))
+    @Transform(({ value }) => typeof value === 'object' ? value : JSON.parse(value))
     @IsMultiRequired({ each: false })
     name: ModelLanguage;
 
@@ -18,11 +18,11 @@ export class CreatePizzaDto {
     ingredients: Array<mongoose.Types.ObjectId>;
 
     @ApiProperty({ type: ModelSizes, default: new ModelSizes() })
-    @Transform(({ value }) => JSON.parse(value))
+    @Transform(({ value }) => typeof value === 'object' ? value : JSON.parse(value))
     price: ModelSizes;
 
     @ApiProperty({ type: ModelSizes, default: new ModelSizes() })
-    @Transform(({ value }) => JSON.parse(value))
+    @Transform(({ value }) => typeof value === 'object' ? value : JSON.parse(value))
     weight: ModelSizes;
 
 
