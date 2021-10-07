@@ -17,6 +17,7 @@ import { ELanguage } from '@models/language.model';
 import { LangInterceptor } from './interceptors/lang.interceptor';
 import { LanguageModule } from './module-language/language.module';
 import { PizzaStatusesModule } from './pizza-statuses/pizza-statuses.module';
+import { TasksModule } from './tasks/tasks.module';
 
 @Module({
   imports: [
@@ -38,7 +39,8 @@ import { PizzaStatusesModule } from './pizza-statuses/pizza-statuses.module';
     PromotionsModule,
     IngredientsModule,
     ShopsModule,
-    LanguageModule
+    LanguageModule,
+    TasksModule
   ],
   controllers: [],
   exports: [LanguageModule],

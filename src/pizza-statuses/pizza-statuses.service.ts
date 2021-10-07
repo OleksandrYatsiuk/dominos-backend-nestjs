@@ -8,7 +8,7 @@ import { ModelPizzaStatus } from './entities/pizza-status.entity';
 
 @Injectable()
 export class PizzaStatusesService {
-  constructor(@InjectModel(PizzaStatuses.name) private _db: Model<PizzaStatusDocument>,) {
+  constructor(@InjectModel(PizzaStatuses.name) private _db: Model<PizzaStatusDocument>) {
   }
 
   async create(createPizzaStatusDto: CreatePizzaStatusDto) {
