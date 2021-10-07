@@ -15,7 +15,7 @@ export class CreatePizzaDto {
 
     @IsMongoId({ each: true })
     @ApiProperty({ required: true, type: Array, default: [] })
-    ingredients: Array<mongoose.Types.ObjectId>;
+    ingredientsIds: Array<mongoose.Types.ObjectId>;
 
     @ApiProperty({ type: ModelSizes, default: new ModelSizes() })
     @Transform(({ value }) => typeof value === 'object' ? value : JSON.parse(value))

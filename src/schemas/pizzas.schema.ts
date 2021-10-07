@@ -3,6 +3,7 @@ import { ModelLanguage } from '@models/language.model';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import { Document } from 'mongoose';
+import { Ingredients, IngredientsDocument } from './ingredients.schema';
 
 export type PizzaDocument = Pizza & Document & { _doc: Pizza };
 
@@ -31,8 +32,8 @@ export class Pizza {
     @Prop({ type: ModelSizes, default: new ModelSizes(), required: true })
     weight: ModelSizes
 
-    @Prop({ default: [] })
-    ingredients: Array<mongoose.Types.ObjectId>;
+    @Prop({ default: [], ref: Ingredients.name })
+    ingredients: Array<mongoose.Types.ObjectId | IngredientsDocument>;
 
     @Prop({ default: 0 })
     category: number;

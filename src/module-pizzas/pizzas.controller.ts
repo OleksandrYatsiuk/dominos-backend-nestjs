@@ -37,7 +37,7 @@ export class PizzasController {
   @Get(':id')
   @ApiOkResponse({ type: ModelPizza })
   findOne(@Param('id') id: string) {
-    return this.pizzasService.findOne(id).then(result => new ModelPizza(result));
+    return this.pizzasService.findOne(id);
   }
 
   @Patch(':id')

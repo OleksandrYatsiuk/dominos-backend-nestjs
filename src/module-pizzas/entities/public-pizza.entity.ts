@@ -1,36 +1,19 @@
-import { IItemSizes, ModelSizes } from "@models/item-sizes.model";
+import { ModelSizes } from "@models/item-sizes.model";
 import { ELanguage } from "@models/language.model";
-import { ApiProperty } from "@nestjs/swagger";
-import * as mongoose from 'mongoose';
+import { ApiProperty, OmitType } from "@nestjs/swagger";
+import { IngredientsDocument, IngredientsSchema } from "@schemas/ingredients.schema";
+import { ModelPublicIngredient } from "src/module-ingredients/entities/ingredient-public.entity";
+import { ModelPizza } from "./pizza.entity";
 
-export class ModelPizzaPublic {
+export class ModelPizzaPublic extends OmitType(ModelPizza, ['name', 'ingredients']) {
 
-    @ApiProperty({ required: false, type: String, readOnly: true })
-    id: string;
 
     @ApiProperty({ required: true, type: String, default: 'name' })
-    name: ELanguage;
+    name: string;
 
-    @ApiProperty({ required: true, type: Array, default: [] })
-    ingredients: Array<mongoose.Types.ObjectId>;
+    @ApiProperty({ required: true, type: [ModelPublicIngredient], default: [] })
+    ingredients: ModelPublicIngredient[];
 
-    @ApiProperty({ type: String, default: null })
-    price: IItemSizes;
-
-    @ApiProperty({ type: String, default: null })
-    weight: IItemSizes;
-
-    @ApiProperty({ required: true, type: Number, default: 0 })
-    category: number;
-
-    @ApiProperty({ required: false, type: String, default: null })
-    image: string;
-
-    @ApiProperty({ type: Number, default: new Date() })
-    createdAt: Date;
-
-    @ApiProperty({ type: Number, default: new Date() })
-    updatedAt: Date;
 
     constructor({
         _id = null,
@@ -41,13 +24,15 @@ export class ModelPizzaPublic {
         createdAt = null,
         price = null,
         weight = null,
-        updatedAt = null
-    } = {}) {
+        updatedAt = null,
+    }: Partial<ModelPizza & { ingredients: IngredientsDocument[] }> = {}, lang: ELanguage) {
+        super();
+        console.log(ingredients);
         this.id = _id;
-        this.name = name;
+        this.name = name[lang];
         this.price = new ModelSizes(price);
         this.weight = new ModelSizes(weight);
-        this.ingredients = ingredients;
+        this.ingredients = ingredients.map(i => new ModelPublicIngredient(i as IngredientsDocument, lang));
         this.category = category;
         this.image = image;
         this.createdAt = createdAt;

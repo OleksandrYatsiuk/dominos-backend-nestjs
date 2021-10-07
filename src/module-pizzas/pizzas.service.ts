@@ -9,6 +9,7 @@ import { CreatePizzaDto } from './dto/create-pizza.dto';
 import { UpdatePizzaDto } from './dto/update-pizza.dto';
 import { ModelPizza } from './entities/pizza.entity';
 import { ModelPizzaPublic } from './entities/public-pizza.entity';
+import { IngredientsDocument } from '@schemas/ingredients.schema';
 
 @Injectable()
 export class PizzasService {
@@ -16,21 +17,26 @@ export class PizzasService {
   constructor(
     @InjectModel(Pizza.name) private _db: Model<PizzaDocument>,
     @Inject(LangService) private _ls: LangService,
-    private _s3: AwsS3Service,
-
+    private _s3: AwsS3Service
   ) {
 
   }
 
   async create(createPizzaDto: CreatePizzaDto, file: Express.Multer.File): Promise<PizzaDocument> {
 
+    const data = {
+      ...createPizzaDto,
+      ingredients: createPizzaDto.ingredientsIds,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }
     if (file) {
       const img = await this._s3.upload(file);
       createPizzaDto.image = img.Location;
-      const pizza = new this._db(createPizzaDto).save();
+      const pizza = new this._db({ ...data, image: img.Location }).save();
       return pizza;
     } else {
-      const pizza = new this._db(createPizzaDto).save();
+      const pizza = new this._db({ ...data }).save();
       return pizza;
     }
 
@@ -47,31 +53,37 @@ export class PizzasService {
     };
   }
   async findAllPublic(query: any = {}): Promise<PaginatedDto<ModelPizzaPublic[]>> {
-    const pizzas: PizzaDocument[] = await paginateUtils(this._db, query);
+    const pizzas: PizzaDocument[] = await paginateUtils(this._db, query).populate('ingredients');
     return {
       total: await this._db.estimatedDocumentCount({}) || 0,
       page: Number(query.page) || 1,
       limit: Number(query.limit) || 20,
-      result: pizzas.map(p => new ModelPizzaPublic({ ...p._doc, name: this._ls.getValue(p._doc.name) }))
-    };
+      result: pizzas.map(p => new ModelPizzaPublic(new ModelPizza(p), this._ls.getLang()))
+    }
   }
 
 
-  findOne(id: string): Promise<PizzaDocument> {
-    return this._db.findById(id).exec();
+  findOne(id: string): Promise<ModelPizzaPublic> {
+    return this._db.findById(id).populate('ingredients').exec().then((p: PizzaDocument & { ingredients: IngredientsDocument }) => new ModelPizzaPublic({ ...p, ingredients: p._doc.ingredients as IngredientsDocument[] }, this._ls.getLang()));
   }
 
   async findOnePublic(id: string): Promise<ModelPizzaPublic> {
     const p = await this._db.findById(id).exec();
-    return new ModelPizzaPublic({ ...p._doc, name: this._ls.getValue(p._doc.name) });
+    return new ModelPizzaPublic({...p._doc, ingredients:p._doc.ingredients as IngredientsDocument[]}, this._ls.getLang());
   }
 
   update(id: string, updatePizzaDto: UpdatePizzaDto) {
     return this._db.exists(({ _id: id }))
       .then(exist => {
+
+        const data = {
+          ...updatePizzaDto,
+          ingredients: updatePizzaDto.ingredientsIds,
+          updatedAt: new Date(),
+        }
         if (exist) {
           return this._db.findByIdAndUpdate(id, {
-            $set: { ...updatePizzaDto, updatedAt: new Date() }
+            $set: data
           },
             { new: true }).exec().then(record => new ModelPizza(record))
         } else {

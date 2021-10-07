@@ -1,10 +1,13 @@
 import { IItemSizes, ModelSizes } from "@models/item-sizes.model";
 import { ModelLanguage } from "@models/language.model";
 import { ApiProperty } from "@nestjs/swagger";
+import { IngredientsDocument } from "@schemas/ingredients.schema";
 import { PizzaDocument } from "@schemas/pizzas.schema";
 import * as mongoose from 'mongoose';
 
 export class ModelPizza implements Partial<PizzaDocument>{
+
+    readonly _id: string;
 
     @ApiProperty({ required: false, type: String, readOnly: true })
     id: string;
@@ -13,7 +16,7 @@ export class ModelPizza implements Partial<PizzaDocument>{
     name: ModelLanguage;
 
     @ApiProperty({ required: true, type: Array, default: [] })
-    ingredients: Array<mongoose.Types.ObjectId>;
+    ingredients: Array<mongoose.Types.ObjectId | IngredientsDocument>;
 
     @ApiProperty({ type: String, default: null })
     price: IItemSizes;
@@ -49,7 +52,7 @@ export class ModelPizza implements Partial<PizzaDocument>{
         this.name = name;
         this.price = new ModelSizes(price);
         this.weight = new ModelSizes(weight);
-        this.ingredients = ingredients;
+        this.ingredients = ingredients as mongoose.Types.ObjectId[];
         this.category = category;
         this.image = image;
         this.createdAt = createdAt;
