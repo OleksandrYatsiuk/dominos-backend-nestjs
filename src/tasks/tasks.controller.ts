@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, Res, Query } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
-import { ApiExtraModels, ApiNoContentResponse, ApiTags } from '@nestjs/swagger';
+import { ApiExtraModels, ApiNoContentResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Task } from './entities/task.entity';
 import { Response } from 'express';
+import { EnumImportance, EnumStatus } from './entities/task.enum';
 
 
 @Controller('tasks')
@@ -20,8 +21,20 @@ export class TasksController {
   }
 
   @Get()
-  findAll() {
-    return this.tasksService.findAll();
+  @ApiQuery({ name: 'sort', description: 'date, name, -date, -name...', type: String, required: false })
+  @ApiQuery({
+    name: 'status', description: EnumStatus.pending,
+    enum: [EnumStatus.pending, EnumStatus.inProgress],
+    required: false
+  })
+  @ApiQuery({
+    name: 'importance',
+    description: EnumImportance.normal,
+    enum: [EnumImportance.critical, EnumImportance.minor, EnumImportance.normal],
+    required: false
+  })
+  findAll(@Query() query: any) {
+    return this.tasksService.findAll(query);
   }
 
   @Get(':id')

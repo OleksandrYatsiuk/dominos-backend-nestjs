@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { EnumImportance, EnumStatus } from "../entities/task.enum";
 
 export class CreateTaskDto {
     @ApiProperty({ required: true, type: String, default: '' })
@@ -7,9 +8,14 @@ export class CreateTaskDto {
     @ApiProperty({ required: true, type: String, default: '' })
     date: string;
 
-    @ApiProperty({ required: true, type: String, default: '' })
-    status: string;
+    @ApiProperty({ required: true, type: String, enum: [EnumStatus.inProgress, EnumStatus.pending], default: EnumStatus.pending })
+    status: EnumStatus;
 
-    @ApiProperty({ required: true, type: String, default: '' })
-    importance: string;
+    @ApiProperty({ required: true, type: String, enum: [EnumImportance.critical, EnumImportance.minor, EnumImportance.normal], default: EnumImportance.normal })
+    importance: EnumImportance;
+
+    @ApiProperty({ required: true, type: Date, default: new Date(), readOnly: true })
+    createdAt: Date;
+    @ApiProperty({ required: true, type: Date, default: new Date(), readOnly: true })
+    updatedAt: Date;
 }

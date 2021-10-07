@@ -9,16 +9,26 @@ import { Task } from './entities/task.entity';
 @Injectable()
 export class TasksService {
   constructor(@InjectModel(Tasks.name) private _db: Model<TasksDocument>) {
-
   }
 
   async create(createTaskDto: CreateTaskDto) {
-    const task = await new this._db(createTaskDto).save();
-    return  new Task(task);
+    const task = await new this._db({ ...createTaskDto, createdAt: new Date(), updatedAt: new Date() }).save();
+    return new Task(task);
   }
 
-  findAll(): Promise<Task[]> {
-    return this._db.find().then(item => item.map(s => new Task(s)));
+  findAll(query?: Record<string, string>): Promise<Task[]> {
+
+    const filter: any = {};
+    if (query?.status) {
+      filter.status = query.status;
+    }
+    if (query?.importance) {
+      filter.importance = query.importance;
+    }
+
+    return this._db.find()
+      .where(filter)
+      .sort(query?.sort || { updatedAt: -1 }).then(item => item.map(s => new Task(s)));
   }
 
   findOne(id: string): Promise<Task> {
@@ -34,7 +44,7 @@ export class TasksService {
           },
             { new: true }).exec().then(record => new Task(record))
         } else {
-          throw new Error('Pizza not found');
+          throw new Error('Task was not founded!');
         }
       })
   }
