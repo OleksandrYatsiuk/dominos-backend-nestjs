@@ -6,6 +6,7 @@ export enum EnumImportance {
 
 export enum EnumStatus {
     pending = 'pending',
-    inProgress = 'in progress'
+    inProgress = 'in progress',
+    closed = 'closed'
 }
 

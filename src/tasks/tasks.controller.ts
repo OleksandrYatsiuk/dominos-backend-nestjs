@@ -24,7 +24,7 @@ export class TasksController {
   @ApiQuery({ name: 'sort', description: 'date, name, -date, -name...', type: String, required: false })
   @ApiQuery({
     name: 'status', description: EnumStatus.pending,
-    enum: [EnumStatus.pending, EnumStatus.inProgress],
+    enum: [EnumStatus.pending, EnumStatus.inProgress, EnumStatus.closed],
     required: false
   })
   @ApiQuery({

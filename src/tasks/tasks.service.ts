@@ -5,6 +5,7 @@ import { Model } from 'mongoose';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { Task } from './entities/task.entity';
+import { EnumStatus } from './entities/task.enum';
 
 @Injectable()
 export class TasksService {
@@ -40,7 +41,11 @@ export class TasksService {
       .then(exist => {
         if (exist) {
           return this._db.findByIdAndUpdate(id, {
-            $set: { ...updateTaskDto, updatedAt: new Date() }
+            $set: {
+              ...updateTaskDto,
+              finishedAt: updateTaskDto?.status === EnumStatus.closed ? new Date() : null,
+              updatedAt: new Date()
+            }
           },
             { new: true }).exec().then(record => new Task(record))
         } else {

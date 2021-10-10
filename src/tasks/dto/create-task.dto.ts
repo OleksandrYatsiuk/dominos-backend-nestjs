@@ -8,11 +8,14 @@ export class CreateTaskDto {
     @ApiProperty({ required: true, type: String, default: '' })
     date: string;
 
-    @ApiProperty({ required: true, type: String, enum: [EnumStatus.inProgress, EnumStatus.pending], default: EnumStatus.pending })
+    @ApiProperty({ required: true, type: String, enum: [EnumStatus.inProgress, EnumStatus.pending, EnumStatus.closed], default: EnumStatus.pending })
     status: EnumStatus;
 
     @ApiProperty({ required: true, type: String, enum: [EnumImportance.critical, EnumImportance.minor, EnumImportance.normal], default: EnumImportance.normal })
     importance: EnumImportance;
+
+    @ApiProperty({ required: true, type: Date, default: null, readOnly: true })
+    finishedAt: Date;
 
     @ApiProperty({ required: true, type: Date, default: new Date(), readOnly: true })
     createdAt: Date;

@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { TasksDocument } from "@schemas/tasks.schema";
+import { EnumStatus } from "./task.enum";
 
 export class Task implements Partial<TasksDocument> {
 
@@ -13,10 +14,13 @@ export class Task implements Partial<TasksDocument> {
     date: string;
 
     @ApiProperty({ required: true, type: String, default: '' })
-    status: string;
+    status: EnumStatus;
 
     @ApiProperty({ required: true, type: String, default: '' })
     importance: string;
+
+    @ApiProperty({ type: Number, default: new Date() })
+    finishedAt: Date;
 
     @ApiProperty({ type: Number, default: new Date() })
     createdAt: Date;
@@ -30,8 +34,9 @@ export class Task implements Partial<TasksDocument> {
         date = null,
         status = null,
         importance = null,
-        createdAt=null,
-        updatedAt=null
+        finishedAt = null,
+        createdAt = null,
+        updatedAt = null
 
     }) {
         this.id = _id;
@@ -39,6 +44,7 @@ export class Task implements Partial<TasksDocument> {
         this.date = date;
         this.status = status;
         this.importance = importance;
+        this.finishedAt = finishedAt;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
