@@ -16,14 +16,12 @@ export class PizzasService {
   constructor(
     @InjectModel(Pizza.name) private _db: Model<PizzaDocument>,
     @Inject(LangService) private _ls: LangService,
-    private _s3: AwsS3Service,
-
+    private _s3: AwsS3Service
   ) {
 
   }
 
   async create(createPizzaDto: CreatePizzaDto, file: Express.Multer.File): Promise<PizzaDocument> {
-
     if (file) {
       const img = await this._s3.upload(file);
       createPizzaDto.image = img.Location;
