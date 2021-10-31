@@ -4,7 +4,7 @@ import { ModelLanguage } from "@models/language.model";
 import { Transform } from "class-transformer";
 import { IsMultiRequired } from "@decorators/validation";
 import { ModelSizes } from "@models/item-sizes.model";
-import { DrinksTypes } from "src/enums/drinks.enum";
+import { DrinksCategory } from "src/enums/drinks.enum";
 
 export class ModelDrinks implements Partial<DrinksDocument> {
 
@@ -23,8 +23,8 @@ export class ModelDrinks implements Partial<DrinksDocument> {
     @Transform(({ value }) => typeof value === 'object' ? value : JSON.parse(value))
     price: ModelSizes;
 
-    @ApiProperty({ type: DrinksTypes, default: null, required: true, enum: [DrinksTypes.BEER, DrinksTypes.JUICE, DrinksTypes.WATER] })
-    type: DrinksTypes;
+    @ApiProperty({ type: DrinksCategory, default: null, required: true, enum: [DrinksCategory.BEER, DrinksCategory.JUICE, DrinksCategory.WATER] })
+    category: DrinksCategory;
 
     @ApiProperty({ type: ModelSizes, default: new ModelSizes() })
     @Transform(({ value }) => typeof value === 'object' ? value : JSON.parse(value))
@@ -40,6 +40,7 @@ export class ModelDrinks implements Partial<DrinksDocument> {
         _id = null,
         name = null,
         image = null,
+        category = null,
         price = new ModelSizes(),
         size = new ModelSizes(),
         updatedAt = null,
@@ -47,6 +48,7 @@ export class ModelDrinks implements Partial<DrinksDocument> {
     }: Partial<DrinksDocument> = {}) {
         this.id = _id;
         this.name = name;
+        this.category = category;
         this.price = new ModelSizes(price);
         this.size = new ModelSizes(size);
         this.image = image;

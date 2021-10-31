@@ -2,7 +2,7 @@ import { ModelSizes } from '@models/item-sizes.model';
 import { ModelLanguage } from '@models/language.model';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
-import { DrinksTypes } from 'src/enums/drinks.enum';
+import { DrinksCategory } from 'src/enums/drinks.enum';
 
 
 export type DrinksDocument = Drinks & mongoose.Document & { _doc: Drinks };
@@ -25,8 +25,8 @@ export class Drinks {
     @Prop({ type: ModelSizes, default: new ModelSizes(), required: true })
     size: ModelSizes;
 
-    @Prop({ type: DrinksTypes, default: null, required: true })
-    type: DrinksTypes;
+    @Prop({ type: DrinksCategory, default: null, required: true })
+    category: DrinksCategory;
 
     @Prop({ default: Date })
     createdAt: Date;

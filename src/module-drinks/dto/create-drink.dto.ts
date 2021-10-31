@@ -3,7 +3,7 @@ import { ModelLanguage } from "@models/language.model";
 import { Transform } from "class-transformer";
 import { IsMultiRequired } from "@decorators/validation";
 import { ModelSizes } from "@models/item-sizes.model";
-import { DrinksTypes } from "src/enums/drinks.enum";
+import { DrinksCategory } from "src/enums/drinks.enum";
 
 export class CreateDrinkDto {
 
@@ -27,8 +27,8 @@ export class CreateDrinkDto {
     @Transform(({ value }) => typeof value === 'object' ? value : JSON.parse(value))
     size: ModelSizes;
 
-    @ApiProperty({ type: DrinksTypes, default: null, required: true, enum: [DrinksTypes.BEER, DrinksTypes.JUICE, DrinksTypes.WATER] })
-    type: DrinksTypes;
+    @ApiProperty({ type: DrinksCategory, default: null, required: true, enum: [DrinksCategory.BEER, DrinksCategory.JUICE, DrinksCategory.WATER] })
+    category: DrinksCategory;
 
     @ApiProperty({ type: Date, default: new Date() })
     createdAt: Date;
