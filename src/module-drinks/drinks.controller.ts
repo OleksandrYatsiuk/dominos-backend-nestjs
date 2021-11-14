@@ -7,6 +7,7 @@ import { ApiConsumes, ApiExtraModels, ApiNoContentResponse, ApiOkResponse, ApiQu
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiPaginatedResponse } from '@decorators/pagination';
 import { ModelDrinks } from './entities/drink.entity';
+import { UploadImageDrinkDto } from './dto/upload-file.dto';
 
 @ApiTags('Drinks')
 @Controller('drinks')
@@ -42,9 +43,20 @@ export class DrinksController {
     return this.drinksService.update(id, updateDrinkDto);
   }
 
+  @Post(':id/upload')
+  @ApiConsumes('multipart/form-data')
+  @ApiOkResponse({ type: ModelDrinks })
+  @UseInterceptors(FileInterceptor('file'))
+  uploadImage(@Param('id') id: string, @Body() body: UploadImageDrinkDto, @UploadedFile() file: Express.Multer.File, @Res() res: Response) {
+    return this.drinksService.uploadImage(id, file)
+      .then(result => res.status(HttpStatus.OK).send(result))
+  }
+
   @Delete(':id')
   @ApiNoContentResponse()
   remove(@Param('id') id: string, @Res() res: Response) {
     return this.drinksService.remove(id).then(() => res.status(HttpStatus.NO_CONTENT).send());
   }
+
+
 }

@@ -31,10 +31,10 @@ export class ModelDrinks implements Partial<DrinksDocument> {
     size: ModelSizes;
 
     @ApiProperty({ type: Date, default: new Date() })
-    createdAt: Date;
+    readonly createdAt: Date;
 
     @ApiProperty({ type: Date, default: new Date() })
-    updatedAt: Date;
+    readonly updatedAt: Date;
 
     constructor({
         _id = null,

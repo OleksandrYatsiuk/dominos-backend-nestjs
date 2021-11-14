@@ -16,7 +16,7 @@ export class DrinksService {
   constructor(
     @InjectModel(Drinks.name) private _db: Model<DrinksDocument>,
     @Inject(LangService) private _ls: LangService,
-    private _s3: AwsS3Service,
+    private _s3: AwsS3Service
   ) {
 
   }
@@ -67,7 +67,6 @@ export class DrinksService {
     }
   }
 
-
   remove(id: string): Promise<any | NotFoundException> {
     return this._db.findById(id).then(drink => {
       if (drink) {
@@ -80,5 +79,26 @@ export class DrinksService {
         throw new NotFoundException('Drink was not found');
       }
     });
+  }
+
+  async uploadImage(id: string, file: Express.Multer.File): Promise<ModelDrinks | NotFoundException> {
+    const drink = await this._db.findById(id);
+
+    if (!drink) {
+      throw new NotFoundException('Drink was not found');
+    }
+
+    if (drink.image) {
+      this._s3.removeFile(drink.image);
+    }
+
+    const img = await this._s3.upload(file);
+    drink.image = img.Location;
+    drink.updatedAt = new Date();
+
+    return this._db.findByIdAndUpdate(id, {
+      $set: drink
+    }, { new: true }).exec()
+      .then(record => new ModelDrinks(record))
   }
 }

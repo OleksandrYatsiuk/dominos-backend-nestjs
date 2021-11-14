@@ -30,9 +30,9 @@ export class CreateDrinkDto {
     @ApiProperty({ type: DrinksCategory, default: null, required: true, enum: [DrinksCategory.BEER, DrinksCategory.JUICE, DrinksCategory.WATER] })
     category: DrinksCategory;
 
-    @ApiProperty({ type: Date, default: new Date() })
+    @ApiProperty({ type: Date, default: new Date(), readOnly: true })
     createdAt: Date;
 
-    @ApiProperty({ type: Date, default: new Date() })
+    @ApiProperty({ type: Date, default: new Date(), readOnly: true })
     updatedAt: Date;
 }

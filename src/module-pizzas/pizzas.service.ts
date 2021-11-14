@@ -91,5 +91,26 @@ export class PizzasService {
       }
     });
   }
+
+  async uploadImage(id: string, file: Express.Multer.File): Promise<ModelPizza | NotFoundException> {
+    const drink = await this._db.findById(id);
+
+    if (!drink) {
+      throw new NotFoundException('Pizza was not found');
+    }
+
+    if (drink.image) {
+      this._s3.removeFile(drink.image);
+    }
+
+    const img = await this._s3.upload(file);
+    drink.image = img.Location;
+    drink.updatedAt = new Date();
+
+    return this._db.findByIdAndUpdate(id, {
+      $set: drink
+    }, { new: true }).exec()
+      .then(record => new ModelPizza(record))
+  }
 }
 

@@ -10,6 +10,7 @@ import { ModelPizza } from './entities/pizza.entity';
 import { Response, Express } from 'express';
 import { ApiPaginatedResponse } from 'src/decorators/pagination';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { UploadImagePizzaDto } from './dto/upload-image-pizza.dto';
 
 
 @ApiTags('Pizzas')
@@ -45,6 +46,15 @@ export class PizzasController {
   @UseInterceptors(FileInterceptor('image'))
   update(@Param('id') id: string, @Body() updatePizzaDto: UpdatePizzaDto) {
     return this.pizzasService.update(id, updatePizzaDto);
+  }
+
+  @Post(':id/upload')
+  @ApiConsumes('multipart/form-data')
+  @ApiOkResponse({ type: ModelPizza })
+  @UseInterceptors(FileInterceptor('file'))
+  uploadImage(@Param('id') id: string, @Body() body: UploadImagePizzaDto, @UploadedFile() file: Express.Multer.File, @Res() res: Response) {
+    return this.pizzasService.uploadImage(id, file)
+      .then(result => res.status(HttpStatus.OK).send(result))
   }
 
   @Delete(':id')
