@@ -17,9 +17,7 @@ export class PizzasService {
     @InjectModel(Pizza.name) private _db: Model<PizzaDocument>,
     @Inject(LangService) private _ls: LangService,
     private _s3: AwsS3Service
-  ) {
-
-  }
+  ) { }
 
   async create(createPizzaDto: CreatePizzaDto, file: Express.Multer.File): Promise<PizzaDocument> {
     if (file) {
@@ -31,10 +29,7 @@ export class PizzasService {
       const pizza = new this._db(createPizzaDto).save();
       return pizza;
     }
-
-
   }
-
   async findAll(query: any = {}): Promise<PaginatedDto<ModelPizza[]>> {
     const pizzas = await paginateUtils(this._db, query);
     return {
@@ -53,17 +48,13 @@ export class PizzasService {
       result: pizzas.map(p => new ModelPizzaPublic({ ...p._doc, name: this._ls.getValue(p._doc.name) }))
     };
   }
-
-
   findOne(id: string): Promise<PizzaDocument> {
     return this._db.findById(id).exec();
   }
-
   async findOnePublic(id: string): Promise<ModelPizzaPublic> {
     const p = await this._db.findById(id).exec();
     return new ModelPizzaPublic({ ...p._doc, name: this._ls.getValue(p._doc.name) });
   }
-
   update(id: string, updatePizzaDto: UpdatePizzaDto) {
     return this._db.exists(({ _id: id }))
       .then(exist => {
@@ -77,7 +68,6 @@ export class PizzasService {
         }
       })
   }
-
   remove(id: string): Promise<any> {
     return this._db.findById(id).then(pizza => {
       if (pizza) {
@@ -91,7 +81,6 @@ export class PizzasService {
       }
     });
   }
-
   async uploadImage(id: string, file: Express.Multer.File): Promise<ModelPizza | NotFoundException> {
     const drink = await this._db.findById(id);
 

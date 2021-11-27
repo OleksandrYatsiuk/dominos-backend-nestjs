@@ -18,6 +18,7 @@ import { LangInterceptor } from './interceptors/lang.interceptor';
 import { LanguageModule } from './module-language/language.module';
 import { PizzaStatusesModule } from './pizza-statuses/pizza-statuses.module';
 import { TasksModule } from './tasks/tasks.module';
+import { ProductsModule } from './module-products/products.module';
 
 @Module({
   imports: [
@@ -40,7 +41,8 @@ import { TasksModule } from './tasks/tasks.module';
     IngredientsModule,
     ShopsModule,
     LanguageModule,
-    TasksModule
+    TasksModule,
+    ProductsModule
   ],
   controllers: [],
   exports: [LanguageModule],

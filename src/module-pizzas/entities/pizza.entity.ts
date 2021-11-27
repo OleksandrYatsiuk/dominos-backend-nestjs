@@ -43,7 +43,6 @@ export class ModelPizza implements Partial<PizzaDocument>{
         price = new ModelSizes(),
         weight = new ModelSizes(),
         updatedAt = null
-
     }: Partial<PizzaDocument> = {}) {
         this.id = _id;
         this.name = name;
