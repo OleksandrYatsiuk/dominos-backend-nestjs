@@ -9,7 +9,7 @@ export class ModelPizza implements Partial<PizzaDocument>{
     @ApiProperty({ required: false, type: String, readOnly: true })
     id: string;
 
-    @ApiProperty({ required: true, type: ModelLanguage, default: 'name' })
+    @ApiProperty({ required: true, type: ModelLanguage })
     name: ModelLanguage;
 
     @ApiProperty({ required: true, type: Array, default: [] })
@@ -19,7 +19,7 @@ export class ModelPizza implements Partial<PizzaDocument>{
     price: IItemSizes;
 
     @ApiProperty({ type: String, default: null })
-    weight: IItemSizes;
+    size: IItemSizes;
 
     @ApiProperty({ required: true, type: Number, default: 0 })
     category: number;
@@ -41,13 +41,13 @@ export class ModelPizza implements Partial<PizzaDocument>{
         image = null,
         createdAt = null,
         price = new ModelSizes(),
-        weight = new ModelSizes(),
+        size = new ModelSizes(),
         updatedAt = null
     }: Partial<PizzaDocument> = {}) {
         this.id = _id;
         this.name = name;
         this.price = new ModelSizes(price);
-        this.weight = new ModelSizes(weight);
+        this.size = new ModelSizes(size);
         this.ingredients = ingredients;
         this.category = category;
         this.image = image;

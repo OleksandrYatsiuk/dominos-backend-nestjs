@@ -2,13 +2,13 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, Upl
 import { ShopsService } from './shops.service';
 import { CreateShopDto } from './dto/create-shop.dto';
 import { UpdateShopDto } from './dto/update-shop.dto';
-import { ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { ApiConsumes, ApiExtraModels, ApiOkResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ModelShop } from './entities/shop.entity';
 import { Response } from 'express';
-import { ApiPaginatedResponse } from '@decorators/pagination';
 
 @ApiTags('Shops')
+@ApiExtraModels(ModelShop)
 @Controller('shops')
 export class ShopsController {
   constructor(private readonly shopsService: ShopsService) { }
@@ -21,16 +21,19 @@ export class ShopsController {
   }
 
   @Get()
+  @ApiOkResponse({ schema: { type: 'array', items: { $ref: getSchemaPath(ModelShop) } } })
   findAll() {
     return this.shopsService.findAll();
   }
 
   @Get(':id')
+  @ApiOkResponse({ type: ModelShop })
   findOne(@Param('id') id: string) {
     return this.shopsService.findOne(+id);
   }
 
   @Patch(':id')
+  @ApiOkResponse({ type: ModelShop })
   update(@Param('id') id: string, @Body() updateShopDto: UpdateShopDto) {
     return this.shopsService.update(+id, updateShopDto);
   }

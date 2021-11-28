@@ -18,7 +18,7 @@ export class ModelPizzaPublic {
     price: IItemSizes;
 
     @ApiProperty({ type: String, default: null })
-    weight: IItemSizes;
+    size: IItemSizes;
 
     @ApiProperty({ required: true, type: Number, default: 0 })
     category: number;
@@ -46,7 +46,7 @@ export class ModelPizzaPublic {
         this.id = _id;
         this.name = name;
         this.price = new ModelSizes(price);
-        this.weight = new ModelSizes(weight);
+        this.size = new ModelSizes(weight);
         this.ingredients = ingredients;
         this.category = category;
         this.image = image;

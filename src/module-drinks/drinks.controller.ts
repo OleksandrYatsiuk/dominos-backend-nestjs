@@ -3,7 +3,7 @@ import { DrinksService } from './drinks.service';
 import { CreateDrinkDto } from './dto/create-drink.dto';
 import { UpdateDrinkDto } from './dto/update-drink.dto';
 import { Response, Express } from 'express';
-import { ApiConsumes, ApiExtraModels, ApiNoContentResponse, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiConsumes, ApiCreatedResponse, ApiExtraModels, ApiNoContentResponse, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiPaginatedResponse } from '@decorators/pagination';
 import { ModelDrinks } from './entities/drink.entity';
@@ -17,6 +17,7 @@ export class DrinksController {
 
   @Post()
   @ApiConsumes('multipart/form-data')
+  @ApiCreatedResponse({ type: ModelDrinks })
   @UseInterceptors(FileInterceptor('image'))
   create(@Body() createDrinkDto: CreateDrinkDto, @UploadedFile() file: Express.Multer.File) {
     return this.drinksService.create(createDrinkDto, file);
@@ -39,6 +40,7 @@ export class DrinksController {
   }
 
   @Patch(':id')
+  @ApiOkResponse({ type: ModelDrinks })
   update(@Param('id') id: string, @Body() updateDrinkDto: UpdateDrinkDto) {
     return this.drinksService.update(id, updateDrinkDto);
   }

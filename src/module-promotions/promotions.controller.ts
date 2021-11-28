@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Res, HttpStat
 import { PromotionsService } from './promotions.service';
 import { CreatePromotionDto } from './dto/create-promotion.dto';
 import { UpdatePromotionDto } from './dto/update-promotion.dto';
-import { ApiConsumes, ApiExtraModels, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiConsumes, ApiCreatedResponse, ApiExtraModels, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ModelPromotion } from './entities/promotion.entity';
 import { Response } from 'express';
 import { ApiPaginatedResponse } from 'src/decorators/pagination';
@@ -20,6 +20,7 @@ export class PromotionsController {
   @Post()
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('image'))
+  @ApiCreatedResponse({ type: ModelPromotion })
   create(@Body() createPromotionDto: CreatePromotionDto, @UploadedFile() image: Express.Multer.File) {
     return this.promotionsService.create(createPromotionDto, image).then(p => new ModelPromotion(p));
   }
@@ -42,12 +43,14 @@ export class PromotionsController {
   }
 
   @Patch(':id')
+  @ApiOkResponse({ type: ModelPromotion })
   update(@Param('id') id: string, @Body() updatePromotionDto: UpdatePromotionDto): Promise<ModelPromotion> {
     return this.promotionsService.update(id, updatePromotionDto).then(p => new ModelPromotion(p));
   }
 
   @Post('upload/:id')
   @ApiConsumes('multipart/form-data')
+  @ApiOkResponse({ type: ModelPromotion })
   @UseInterceptors(FileInterceptor('image'))
   upload(@Param('id') id: string, @Body() body: FileDto, @UploadedFile() image: Express.Multer.File) {
     return this.promotionsService.upload(id, image).then(p => new ModelPromotion(p));

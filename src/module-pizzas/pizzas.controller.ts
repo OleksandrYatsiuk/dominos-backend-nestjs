@@ -5,7 +5,7 @@ import {
 import { PizzasService } from './pizzas.service';
 import { CreatePizzaDto } from './dto/create-pizza.dto';
 import { UpdatePizzaDto } from './dto/update-pizza.dto';
-import { ApiConsumes, ApiExtraModels, ApiNoContentResponse, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiConsumes, ApiCreatedResponse, ApiExtraModels, ApiNoContentResponse, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ModelPizza } from './entities/pizza.entity';
 import { Response, Express } from 'express';
 import { ApiPaginatedResponse } from 'src/decorators/pagination';
@@ -21,6 +21,7 @@ export class PizzasController {
 
   @Post()
   @ApiConsumes('multipart/form-data')
+  @ApiCreatedResponse({ type: ModelPizza })
   @UseInterceptors(FileInterceptor('image'))
   create(@Body() createPizzaDto: CreatePizzaDto, @UploadedFile() image: Express.Multer.File): Promise<ModelPizza> {
     return this.pizzasService.create(createPizzaDto, image).then(p => new ModelPizza(p));
@@ -43,6 +44,7 @@ export class PizzasController {
 
   @Patch(':id')
   @ApiConsumes('multipart/form-data')
+  @ApiOkResponse({ type: ModelPizza })
   @UseInterceptors(FileInterceptor('image'))
   update(@Param('id') id: string, @Body() updatePizzaDto: UpdatePizzaDto) {
     return this.pizzasService.update(id, updatePizzaDto);

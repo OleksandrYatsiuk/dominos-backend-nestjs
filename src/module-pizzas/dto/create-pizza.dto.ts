@@ -23,7 +23,7 @@ export class CreatePizzaDto {
 
     @ApiProperty({ type: ModelSizes, default: new ModelSizes() })
     @Transform(({ value }) => typeof value === 'object' ? value : JSON.parse(value))
-    weight: ModelSizes;
+    size: ModelSizes;
 
 
     @ApiProperty({ required: true, type: Number, default: 0 })

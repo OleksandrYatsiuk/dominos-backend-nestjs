@@ -29,7 +29,7 @@ export class Pizza {
     price: ModelSizes;
 
     @Prop({ type: ModelSizes, default: new ModelSizes(), required: true })
-    weight: ModelSizes
+    size: ModelSizes
 
     @Prop({ default: [] })
     ingredients: Array<mongoose.Types.ObjectId>;
