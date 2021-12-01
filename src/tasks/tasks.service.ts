@@ -1,3 +1,4 @@
+import { PaginatedDto, paginateUtils } from '@models/pagination.model';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Tasks, TasksDocument } from '@schemas/tasks.schema';
@@ -17,7 +18,7 @@ export class TasksService {
     return new Task(task);
   }
 
-  findAll(query?: Record<string, string>): Promise<Task[]> {
+  async findAll(query?: Record<string, string>): Promise<PaginatedDto<Task[]>> {
 
     const filter: any = {};
     if (query?.status) {
@@ -27,9 +28,13 @@ export class TasksService {
       filter.importance = query.importance;
     }
 
-    return this._db.find()
-      .where(filter)
-      .sort(query?.sort || { updatedAt: -1 }).then(item => item.map(s => new Task(s)));
+    const tasks = await paginateUtils(this._db, query, filter);
+    return {
+      total: await this._db.estimatedDocumentCount({}) || 0,
+      page: Number(query.page) | 1,
+      limit: Number(query.limit) || 20,
+      result: tasks.map(s => new Task(s))
+    };
   }
 
   findOne(id: string): Promise<Task> {

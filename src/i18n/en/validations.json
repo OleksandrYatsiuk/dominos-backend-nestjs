@@ -3,5 +3,6 @@
   "max": "Field \"{field}\" must not be more than {value}.",
   "isInt": "Field \"{field}\" must be  as integer.",
   "isMultiRequired": "Field \"{field}\" must be populated in all languages.",
-  "isPartialMultiRequired": "Field \"{field}\" must be filled in at least one language."
+  "isPartialMultiRequired": "Field \"{field}\" must be filled in at least one language.",
+  "match": "Field \"{field}\" don't match to Confirm Password"
 }

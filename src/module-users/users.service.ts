@@ -1,11 +1,23 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { User, UsersDocument } from '@schemas/users.schema';
+import { AwsS3Service } from '@services/aws.service';
+import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
+
+  constructor(
+    @InjectModel(User.name) private _userDb: Model<UsersDocument>,
+    private _s3Service: AwsS3Service
+  ) {
+
+  }
+
   create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+    return createUserDto;
   }
 
   findAll() {

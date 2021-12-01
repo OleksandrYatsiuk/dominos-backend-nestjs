@@ -6,6 +6,7 @@ import { ApiExtraModels, ApiNoContentResponse, ApiQuery, ApiTags } from '@nestjs
 import { Task } from './entities/task.entity';
 import { Response } from 'express';
 import { EnumImportance, EnumStatus } from './entities/task.enum';
+import { ApiPaginatedResponse } from '@decorators/pagination';
 
 
 @Controller('tasks')
@@ -21,6 +22,7 @@ export class TasksController {
   }
 
   @Get()
+  @ApiPaginatedResponse(Task)
   @ApiQuery({ name: 'sort', description: 'date, name, -date, -name...', type: String, required: false })
   @ApiQuery({
     name: 'status', description: EnumStatus.pending,
@@ -33,6 +35,8 @@ export class TasksController {
     enum: [EnumImportance.critical, EnumImportance.minor, EnumImportance.normal],
     required: false
   })
+  @ApiQuery({ name: 'limit', example: 20, type: Number, required: false })
+  @ApiQuery({ name: 'page', example: 1, type: Number, required: false })
   findAll(@Query() query: any) {
     return this.tasksService.findAll(query);
   }

@@ -1,4 +1,6 @@
 {
   "category": "Category",
-  "name": "Name"
+  "name": "Name",
+  "password": "Password",
+  "confirmPassword": "Confirm Password"
 }

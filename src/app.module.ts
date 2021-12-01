@@ -19,6 +19,7 @@ import { LanguageModule } from './module-language/language.module';
 import { PizzaStatusesModule } from './pizza-statuses/pizza-statuses.module';
 import { TasksModule } from './tasks/tasks.module';
 import { ProductsModule } from './module-products/products.module';
+import { AuthModule } from './module-auth/auth.module';
 
 @Module({
   imports: [
@@ -33,9 +34,10 @@ import { ProductsModule } from './module-products/products.module';
       },
 
     }),
+    AuthModule,
+    UsersModule,
     PizzasModule,
     PizzaStatusesModule,
-    UsersModule,
     DrinksModule,
     PromotionsModule,
     IngredientsModule,
