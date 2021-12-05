@@ -30,7 +30,7 @@ export class TasksService {
 
     const tasks = await paginateUtils(this._db, query, filter);
     return {
-      total: await this._db.estimatedDocumentCount({}) || 0,
+      total: tasks.length || 0,
       page: Number(query.page) | 1,
       limit: Number(query.limit) || 20,
       result: tasks.map(s => new Task(s))
