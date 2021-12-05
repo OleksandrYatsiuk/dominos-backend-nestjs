@@ -1,11 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseInterceptors, UseGuards, Req } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiConsumes, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiConsumes, ApiCreatedResponse, ApiExtraModels, ApiOkResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { AuthGuard } from 'src/guards/auth/auth.guard';
+import { Request } from 'express';
+import { User } from './entities/user.entity';
 
 @ApiTags('Users')
+@ApiExtraModels(User)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
@@ -16,6 +19,16 @@ export class UsersController {
   @UseInterceptors(FileInterceptor('image'))
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+
+  @ApiOkResponse({ type: User })
+  @ApiUnauthorizedResponse()
+  @Get('/current')
+  current(@Req() req: Request & { userId: string }) {
+    return this.usersService.current(req.userId).then(user => new User(user));
   }
 
   // @Get()

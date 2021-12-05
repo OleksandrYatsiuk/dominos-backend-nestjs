@@ -9,7 +9,6 @@ import { User, UsersSchema } from '@schemas/users.schema';
   controllers: [AuthController],
   providers: [AuthService],
   imports: [
-
     MongooseModule.forFeature([
       { name: Auth.name, schema: AuthSchema },
       { name: User.name, schema: UsersSchema }]),

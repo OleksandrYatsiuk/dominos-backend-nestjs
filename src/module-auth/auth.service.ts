@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { User, UsersDocument } from '@schemas/users.schema';
-import { UpdateAuthDto } from './dto/update-auth.dto';
 import * as mongoose from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Auth, AuthDocument } from '@schemas/auth.schema';
@@ -16,7 +15,6 @@ export class AuthService {
     @InjectModel(User.name) private _userDb: mongoose.Model<UsersDocument>,
     @InjectModel(Auth.name) private _authDb: mongoose.Model<AuthDocument>
   ) {
-
 
   }
 
@@ -67,6 +65,22 @@ export class AuthService {
     } else {
       throw new Error('Credentials is invalid.');
     }
+  }
+
+
+  async validateUser(token: string) {
+    return this._authDb.findOne({ hash: token, type: AuthTokens.ACCESS }).then(tokenData => {
+      if (!tokenData) {
+        return false;
+      }
+      const currentDate = new Date();
+      if (tokenData.expiredAt.getTime() < currentDate.getTime()) {
+        return tokenData.userId;
+      } else {
+        this._authDb.deleteOne({ _id: tokenData._id }).exec();
+      }
+      return false;
+    })
   }
 
   private async _createPasswordToken(password: string, userId: mongoose.Types.ObjectId): Promise<AuthDocument> {
