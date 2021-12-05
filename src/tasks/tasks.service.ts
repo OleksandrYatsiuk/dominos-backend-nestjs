@@ -1,4 +1,4 @@
-import { PaginatedDto, paginateUtils } from '@models/pagination.model';
+import { PaginatedDto, paginationUtils } from '@models/pagination.model';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Tasks, TasksDocument } from '@schemas/tasks.schema';
@@ -28,13 +28,10 @@ export class TasksService {
       filter.importance = query.importance;
     }
 
-    const tasks = await paginateUtils(this._db, query, filter);
-    return {
-      total: tasks.length || 0,
-      page: Number(query.page) | 1,
-      limit: Number(query.limit) || 20,
-      result: tasks.map(s => new Task(s))
-    };
+    const pagination = await paginationUtils(this._db, { page: +query.page, limit: +query.limit }, filter, query.sort);
+
+    return { ...pagination, result: pagination.result.map(item => new Task(item)) };
+
   }
 
   findOne(id: string): Promise<Task> {
