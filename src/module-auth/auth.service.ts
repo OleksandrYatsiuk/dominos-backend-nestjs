@@ -42,7 +42,6 @@ export class AuthService {
     const user = await this._getUserData(data.username);
     const hashData = await this._authDb.findOne({ userId: user._id });
 
-    console.log(await this._isPasswordValid(hashData.hash, data.password));
     if (hashData) {
       if (await this._isPasswordValid(data.password, hashData.hash)) {
 
@@ -50,7 +49,7 @@ export class AuthService {
         const expiredDate = date.setDate(date.getDate() + 1);
 
         const accessTokenData = await new this._authDb({
-          hash: 'access Token',
+          hash: await this._generatePasswordHash('Access Token'),
           userId: await user._id,
           createdAt: date,
           updatedAt: date,
