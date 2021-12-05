@@ -26,6 +26,6 @@ export function paginateUtils<T>(model: Model<T>, query: any, filter: any = {}):
     const page = Number(query.page - 1 || 0);
     Object.keys(filter).forEach(key => (filter[key] === undefined || filter[key] === null)
         && delete filter[key]);
-    return model.find(filter).sort({ createdAt: 1 }).limit(limit).skip(limit * page);
+    return model.find(filter).sort(query?.sort || { createdAt: 1 }).limit(limit).skip(limit * page);
 
 }
