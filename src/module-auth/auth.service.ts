@@ -70,11 +70,13 @@ export class AuthService {
 
   async validateUser(token: string) {
     return this._authDb.findOne({ hash: token, type: AuthTokens.ACCESS }).then(tokenData => {
+
       if (!tokenData) {
         return false;
       }
       const currentDate = new Date();
-      if (tokenData.expiredAt.getTime() < currentDate.getTime()) {
+      console.log(tokenData.expiredAt.getTime() > currentDate.getTime());
+      if (tokenData.expiredAt.getTime() > currentDate.getTime()) {
         return tokenData.userId;
       } else {
         this._authDb.deleteOne({ _id: tokenData._id }).exec();
