@@ -10,7 +10,7 @@ import { IngredientsModule } from './module-ingredients/ingredients.module';
 import { ShopsModule } from './module-shops/shops.module';
 import * as path from 'path';
 import { I18nModule, I18nJsonParser } from 'nestjs-i18n';
-import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ValidationFilter } from './filters/validation.filter';
 import { AllExceptionsFilter } from './filters/all-exception';
 import { ELanguage } from '@models/language.model';
@@ -20,6 +20,9 @@ import { PizzaStatusesModule } from './pizza-statuses/pizza-statuses.module';
 import { TasksModule } from './tasks/tasks.module';
 import { ProductsModule } from './module-products/products.module';
 import { AuthModule } from './module-auth/auth.module';
+import { UsersManagementModule } from './module-users-management/users-management.module';
+import { RolesGuard } from './guards/roles/roles.guard';
+import { AuthGuard } from './guards/auth/auth.guard';
 
 @Module({
   imports: [
@@ -36,6 +39,7 @@ import { AuthModule } from './module-auth/auth.module';
     }),
     AuthModule,
     UsersModule,
+    UsersManagementModule,
     PizzasModule,
     PizzaStatusesModule,
     DrinksModule,
@@ -61,6 +65,7 @@ import { AuthModule } from './module-auth/auth.module';
       provide: APP_INTERCEPTOR,
       useClass: LangInterceptor
     }
+
   ],
 })
 export class AppModule { }

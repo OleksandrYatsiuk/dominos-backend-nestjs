@@ -1,11 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { UsersDocument } from '@schemas/users.schema';
 import { UserRole } from 'src/enums/roles.enum';
+import * as mongoose from 'mongoose';
 
-export class User {
+export class ModelUser {
 
     @ApiProperty({ type: String, required: false, readOnly: true, default: '61a7af96d95eae0d397d0bef' })
-    readonly id: Date;
+    readonly id: mongoose.Types.ObjectId;
     @ApiProperty({ type: String, required: false })
     firstName: string;
     @ApiProperty({ type: String, required: false })
@@ -22,6 +23,11 @@ export class User {
     phone: string;
     @ApiProperty({ type: String, required: false })
     image: string;
+
+    @ApiProperty({ required: true, type: Number, default: null })
+    latitude: number;
+    @ApiProperty({ required: true, type: Number, default: null })
+    longitude: number;
     @ApiProperty({ type: Date, required: false, readOnly: true })
     readonly createdAt: Date;
     @ApiProperty({ type: Date, required: false, readOnly: true })
@@ -38,8 +44,10 @@ export class User {
         birthday = null,
         phone = null,
         image = null,
+        latitude = null,
+        longitude = null,
         createdAt = new Date(),
-        updatedAt = new Date()
+        updatedAt = new Date(),
     }: Partial<UsersDocument>) {
         this.id = _id;
         this.firstName = firstName;
@@ -50,8 +58,9 @@ export class User {
         this.birthday = birthday;
         this.phone = phone;
         this.image = image;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.updatedAt = updatedAt;
         this.createdAt = createdAt;
-
     }
 }

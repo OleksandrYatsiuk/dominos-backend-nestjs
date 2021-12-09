@@ -35,7 +35,13 @@ export class User {
     @Prop({ default: null, type: String, required: false })
     phone: string | null;
 
-    @Prop({ default: Date })
+    @Prop({ default: null, type: Number, required: false })
+    latitude: number;
+
+    @Prop({ default: null, type: Number, required: false })
+    longitude: number;
+
+    @Prop({ type: Date })
     createdAt: Date;
 
     @Prop({ default: Date })

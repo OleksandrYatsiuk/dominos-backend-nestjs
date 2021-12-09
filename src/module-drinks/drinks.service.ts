@@ -6,7 +6,6 @@ import { UpdateDrinkDto } from './dto/update-drink.dto';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { AwsS3Service } from '@services/aws.service';
-import { Express } from 'express';
 import { PaginatedDto, paginateUtils } from '@models/pagination.model';
 import { ModelDrinks } from './entities/drink.entity';
 

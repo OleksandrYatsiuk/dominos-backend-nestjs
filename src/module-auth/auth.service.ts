@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { User, UsersDocument } from '@schemas/users.schema';
 import * as mongoose from 'mongoose';
@@ -7,6 +7,7 @@ import { Auth, AuthDocument } from '@schemas/auth.schema';
 import { RegisterDto } from './dto/register.dto';
 import { AuthTokens } from 'src/enums/auth-type.enum';
 import { LoginDto } from './dto/login.dto';
+import { ModelUser } from '../module-users/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -39,15 +40,14 @@ export class AuthService {
 
     const user = await this._getUserData(data.username);
     const hashData = await this._authDb.findOne({ userId: user._id });
-
     if (hashData) {
-      if (await this._isPasswordValid(data.password, hashData.hash)) {
+      if (await this.isPasswordValid(data.password, hashData.hash)) {
 
         const date = new Date();
         const expiredDate = date.setDate(date.getDate() + 1);
 
         const accessTokenData = await new this._authDb({
-          hash: await this._generatePasswordHash('Access Token'),
+          hash: await this.generatePasswordHash('Access Token'),
           userId: await user._id,
           createdAt: date,
           updatedAt: date,
@@ -59,37 +59,39 @@ export class AuthService {
           token: accessTokenData.hash,
           expiredAt: accessTokenData.expiredAt
         };
-      } else {
-        throw new Error('Credentials is invalid.');
       }
-    } else {
-      throw new Error('Credentials is invalid.');
     }
+    throw new BadRequestException('Credentials is invalid.');
   }
 
 
-  async validateUser(token: string) {
-    return this._authDb.findOne({ hash: token, type: AuthTokens.ACCESS }).then(tokenData => {
+  async validateUser(token: string): Promise<ModelUser | false> {
+    return this._authDb.findOne({ hash: token, type: AuthTokens.ACCESS }).populate('userId')
+      .then(authData => {
 
-      if (!tokenData) {
+        if (!authData) {
+          return false;
+        }
+        const user = new ModelUser(authData.userId as UsersDocument);
+        const tokenData: Auth & { user: ModelUser } = { ...authData._doc, userId: user.id, user };
+        if (!tokenData) {
+          return false;
+        }
+        const currentDate = new Date();
+        if (tokenData.expiredAt.getTime() > currentDate.getTime()) {
+          return tokenData.user;
+        } else {
+          this._authDb.deleteOne({ _id: tokenData.userId }).exec();
+        }
         return false;
-      }
-      const currentDate = new Date();
-      console.log(tokenData.expiredAt.getTime() > currentDate.getTime());
-      if (tokenData.expiredAt.getTime() > currentDate.getTime()) {
-        return tokenData.userId;
-      } else {
-        this._authDb.deleteOne({ _id: tokenData._id }).exec();
-      }
-      return false;
-    })
+      })
   }
 
   private async _createPasswordToken(password: string, userId: mongoose.Types.ObjectId): Promise<AuthDocument> {
 
     const date = new Date();
     const authData: Partial<AuthDocument> = {
-      hash: await this._generatePasswordHash(password),
+      hash: await this.generatePasswordHash(password),
       userId,
       createdAt: date,
       updatedAt: date,
@@ -101,13 +103,13 @@ export class AuthService {
 
   }
 
-  private async _generatePasswordHash(password: string): Promise<string> {
+  generatePasswordHash(password: string): Promise<string> {
     const saltOrRounds = 10;
-    return await bcrypt.hash(password, saltOrRounds);
+    return bcrypt.hash(password, saltOrRounds);
   }
 
-  private async _isPasswordValid(hash: string, password: string): Promise<boolean> {
-    return bcrypt.compare(hash, password);
+  isPasswordValid(password: string, hash: string): Promise<boolean> {
+    return bcrypt.compare(password, hash);
   }
 
   private async _createUser(data: RegisterDto): Promise<UsersDocument> {
