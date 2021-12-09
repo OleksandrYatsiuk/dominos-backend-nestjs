@@ -9,6 +9,9 @@ export class UpdateUserDto {
     birthday: Date;
     @ApiProperty({ type: String, required: false })
     phone: string;
+    @ApiProperty({ type: String, required: false, default: undefined })
+    image?: null | undefined;
     @ApiProperty({ type: Date, required: false, readOnly: true })
     updatedAt: Date;
+
 }

@@ -50,7 +50,12 @@ export class UsersService {
       throw new NotFoundException('User was not found');
     }
 
-    return this._userDb.findByIdAndUpdate(id, { $set: { ...updateUserDto, updatedAt: new Date() } }, { new: true });
+    if (updateUserDto?.image === null && user.image) {
+      this._s3.removeFile(user.image);
+      user.image = null;
+    }
+
+    return this._userDb.findByIdAndUpdate(id, { $set: { ...updateUserDto, image: user.image, updatedAt: new Date() } }, { new: true });
   }
 
   remove(id: Types.ObjectId) {
