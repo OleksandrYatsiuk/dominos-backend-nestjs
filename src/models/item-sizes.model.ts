@@ -19,8 +19,8 @@ export class ModelSizes implements IItemSizes {
         middle = 0,
         big = 0
     }: Partial<IItemSizes> = {}) {
-        this.small = small;
-        this.middle = middle;
-        this.big = big;
+        this.small = Number(small);
+        this.middle = Number(middle);
+        this.big = Number(big);
     }
 }

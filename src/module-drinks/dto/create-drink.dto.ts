@@ -28,6 +28,7 @@ export class CreateDrinkDto {
     size: ModelSizes;
 
     @ApiProperty({ type: DrinksCategory, default: null, required: true, enum: [DrinksCategory.BEER, DrinksCategory.JUICE, DrinksCategory.WATER] })
+    @Transform(({ value }) => Number(value))
     category: DrinksCategory;
 
     @ApiProperty({ type: Date, default: new Date(), readOnly: true })
