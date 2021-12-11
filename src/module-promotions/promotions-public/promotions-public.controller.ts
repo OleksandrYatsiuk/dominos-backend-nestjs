@@ -5,9 +5,11 @@ import { ModelPublicPromotion } from '../entities/promotion-public.entity ';
 import { PromotionsService } from '../promotions.service';
 import { Response } from 'express';
 import { ELanguage } from '@models/language.model';
+import { QuerySortDto } from '@models/query-search.dto';
 
 @ApiTags('Promotions')
 @Controller('public/promotions')
+@ApiHeader({ name: 'lang', enum: [ELanguage.uk, ELanguage.ru, ELanguage.en], required: true })
 @ApiExtraModels(ModelPublicPromotion)
 export class PromotionsPublicController {
 
@@ -15,14 +17,8 @@ export class PromotionsPublicController {
 
     @Get()
     @ApiPaginatedResponse(ModelPublicPromotion)
-    @ApiQuery({ name: 'limit', example: 20, type: Number, required: false })
-    @ApiQuery({ name: 'page', example: 1, type: Number, required: false })
-    @ApiHeader({
-        name: 'lang',
-        enum: [ELanguage.uk, ELanguage.ru, ELanguage.en],
-        required: true
-    })
-    findAll(@Query() query, @Res() res: Response): void {
+    @ApiQuery({ type: QuerySortDto })
+    findAll(@Query() query: QuerySortDto, @Res() res: Response): void {
         this.promotionsService.findAllPublic(query)
             .then(result => res.status(HttpStatus.OK).send(result))
     }

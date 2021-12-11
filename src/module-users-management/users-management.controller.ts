@@ -9,6 +9,7 @@ import { UpdateUserRoleDto } from './dto/update-user-role.dto';
 import { RolesGuard } from 'src/guards/roles/roles.guard';
 import { Roles } from 'src/guards/roles/roles.decorator';
 import { UserRole } from 'src/enums/roles.enum';
+import { QuerySortDto } from '@models/query-search.dto';
 
 @ApiBearerAuth()
 @UseGuards(AuthGuard, RolesGuard)
@@ -21,10 +22,7 @@ export class UsersManagementController {
 
   @Get()
   @ApiPaginatedResponse(ModelUser)
-
-  @ApiQuery({ name: 'sort', description: 'createdAt, username, -createdAt, -username...', type: String, required: false })
-  @ApiQuery({ name: 'limit', example: 20, type: Number, required: false })
-  @ApiQuery({ name: 'page', example: 1, type: Number, required: false })
+  @ApiQuery({ type: QuerySortDto })
 
   findAll(@Query() query: any) {
     return this.usersManagementService.findAll(query);

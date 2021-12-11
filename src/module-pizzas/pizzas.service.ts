@@ -1,4 +1,4 @@
-import { PaginatedDto, paginateUtils } from '@models/pagination.model';
+import { PaginatedDto, paginationUtils } from '@models/pagination.model';
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { PizzaDocument, Pizza } from '@schemas/pizzas.schema';
@@ -31,21 +31,17 @@ export class PizzasService {
     }
   }
   async findAll(query: any = {}): Promise<PaginatedDto<ModelPizza[]>> {
-    const pizzas = await paginateUtils(this._db, query);
+    const pizzas = await paginationUtils(this._db, query, {}, query.sort);
     return {
-      total: await this._db.estimatedDocumentCount({}) || 0,
-      page: Number(query.page) | 1,
-      limit: Number(query.limit) || 20,
-      result: pizzas.map(p => new ModelPizza(p))
+      ...pizzas,
+      result: pizzas.result.map(p => new ModelPizza(p))
     };
   }
   async findAllPublic(query: any = {}): Promise<PaginatedDto<ModelPizzaPublic[]>> {
-    const pizzas: PizzaDocument[] = await paginateUtils(this._db, query);
+    const pizzas = await paginationUtils(this._db, query, {}, query.sort);
     return {
-      total: await this._db.estimatedDocumentCount({}) || 0,
-      page: Number(query.page) || 1,
-      limit: Number(query.limit) || 20,
-      result: pizzas.map(p => new ModelPizzaPublic({ ...p._doc, name: this._ls.getValue(p._doc.name) }))
+      ...pizzas,
+      result: pizzas.result.map(p => new ModelPizzaPublic({ ...p._doc, name: this._ls.getValue(p._doc.name) }))
     };
   }
   findOne(id: string): Promise<PizzaDocument> {

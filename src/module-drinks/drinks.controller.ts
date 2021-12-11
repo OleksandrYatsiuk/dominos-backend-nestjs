@@ -8,6 +8,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiPaginatedResponse } from '@decorators/pagination';
 import { ModelDrinks } from './entities/drink.entity';
 import { UploadImageDrinkDto } from './dto/upload-file.dto';
+import { QuerySortDto } from '@models/query-search.dto';
 
 @ApiTags('Drinks')
 @Controller('drinks')
@@ -25,8 +26,7 @@ export class DrinksController {
 
   @Get()
   @ApiPaginatedResponse(ModelDrinks)
-  @ApiQuery({ name: 'limit', example: 20, type: Number, required: false })
-  @ApiQuery({ name: 'page', example: 1, type: Number, required: false })
+  @ApiQuery({ type: QuerySortDto })
   findAll(@Query() query, @Res() res: Response) {
     this.drinksService.findAll(query)
       .then(result => res.status(HttpStatus.OK).send(result))

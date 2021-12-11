@@ -8,6 +8,7 @@ import { Response } from 'express';
 import { ApiPaginatedResponse } from 'src/decorators/pagination';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FileDto } from '@models/file.dto.model';
+import { QuerySortDto } from '@models/query-search.dto';
 
 
 @ApiTags('Promotions')
@@ -27,8 +28,7 @@ export class PromotionsController {
 
   @Get()
   @ApiPaginatedResponse(ModelPromotion)
-  @ApiQuery({ name: 'limit', example: 20, type: Number, required: false })
-  @ApiQuery({ name: 'page', example: 1, type: Number, required: false })
+  @ApiQuery({ type: QuerySortDto })
   findAll(@Query() query, @Res() res: Response): void {
     this.promotionsService.findAll(query)
       .then(result => res.status(HttpStatus.OK).send(result))

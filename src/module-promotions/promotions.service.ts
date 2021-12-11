@@ -1,4 +1,4 @@
-import { PaginatedDto, paginateUtils } from '@models/pagination.model';
+import { PaginatedDto, paginationUtils } from '@models/pagination.model';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Promotions, PromotionsDocument } from '@schemas/promotions.schema';
@@ -32,22 +32,20 @@ export class PromotionsService {
   }
 
   async findAll(query?: any): Promise<PaginatedDto<ModelPromotion[]>> {
-    const promotions = await paginateUtils(this._db, query);
+
+    const promotions = await paginationUtils(this._db, query, {}, query.sort);
     return {
-      total: await this._db.estimatedDocumentCount({}) || 0,
-      page: Number(query.page) | 1,
-      limit: Number(query.limit) || 20,
-      result: promotions.map(p => new ModelPromotion(p))
+      ...promotions,
+      result: promotions.result.map(p => new ModelPromotion(p))
     };
   }
 
   async findAllPublic(query?: any): Promise<PaginatedDto<ModelPublicPromotion[]>> {
-    const promotions = await paginateUtils(this._db, query);
+    const promotions = await paginationUtils(this._db, query, {}, query?.sort);
+
     return {
-      total: await this._db.estimatedDocumentCount({}) || 0,
-      page: Number(query.page) | 1,
-      limit: Number(query.limit) || 20,
-      result: promotions.map(p => new ModelPublicPromotion({
+      ...promotions,
+      result: promotions.result.map(p => new ModelPublicPromotion({
         ...p._doc,
         name: this._ls.getValue(p._doc.name),
         description: this._ls.getValue(p._doc.description)

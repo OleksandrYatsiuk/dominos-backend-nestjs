@@ -6,7 +6,7 @@ import { UpdateDrinkDto } from './dto/update-drink.dto';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { AwsS3Service } from '@services/aws.service';
-import { PaginatedDto, paginateUtils } from '@models/pagination.model';
+import { PaginatedDto, paginationUtils } from '@models/pagination.model';
 import { ModelDrinks } from './entities/drink.entity';
 
 
@@ -34,12 +34,10 @@ export class DrinksService {
   }
 
   async findAll(query): Promise<PaginatedDto<ModelDrinks[]>> {
-    const drinks = await paginateUtils(this._db, query);
+    const drinks = await paginationUtils(this._db, query, {}, query.sort);
     return {
-      total: await this._db.estimatedDocumentCount({}) || 0,
-      page: Number(query.page) | 1,
-      limit: Number(query.limit) || 20,
-      result: drinks.map(d => new ModelDrinks(d))
+      ...drinks,
+      result: drinks.result.map(d => new ModelDrinks(d))
     };
   }
 

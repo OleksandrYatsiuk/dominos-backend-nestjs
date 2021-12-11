@@ -11,6 +11,7 @@ import { Response, Express } from 'express';
 import { ApiPaginatedResponse } from 'src/decorators/pagination';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadImagePizzaDto } from './dto/upload-image-pizza.dto';
+import { QuerySortDto } from '@models/query-search.dto';
 
 
 @ApiTags('Pizzas')
@@ -29,8 +30,7 @@ export class PizzasController {
 
   @Get()
   @ApiPaginatedResponse(ModelPizza)
-  @ApiQuery({ name: 'limit', example: 20, type: Number, required: false })
-  @ApiQuery({ name: 'page', example: 1, type: Number, required: false })
+  @ApiQuery({ type: QuerySortDto })
   findAll(@Query() query, @Res() res: Response) {
     this.pizzasService.findAll(query)
       .then(result => res.status(HttpStatus.OK).send(result))

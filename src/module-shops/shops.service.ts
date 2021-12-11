@@ -1,3 +1,4 @@
+import { PaginatedDto, paginationUtils } from '@models/pagination.model';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Shop, ShopsDocument } from '@schemas/shops.schema';
@@ -30,8 +31,12 @@ export class ShopsService {
     }
   }
 
-  findAll(): Promise<ModelShop[]> {
-    return this._db.find().then(items => items.map(shop => new ModelShop(shop)));
+  async findAll(query: any): Promise<PaginatedDto<ModelShop[]>> {
+    const shops = await paginationUtils(this._db, query, {}, query?.sort)
+    return {
+      ...shops,
+      result: shops.result.map(shop => new ModelShop(shop))
+    }
   }
 
   findOne(id: number) {

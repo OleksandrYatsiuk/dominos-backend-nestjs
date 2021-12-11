@@ -1,11 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, Res, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, Res, HttpStatus, Query } from '@nestjs/common';
 import { ShopsService } from './shops.service';
 import { CreateShopDto } from './dto/create-shop.dto';
 import { UpdateShopDto } from './dto/update-shop.dto';
-import { ApiConsumes, ApiExtraModels, ApiOkResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
+import { ApiConsumes, ApiExtraModels, ApiOkResponse, ApiQuery, ApiTags, getSchemaPath } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ModelShop } from './entities/shop.entity';
 import { Response } from 'express';
+import { QuerySortDto } from '@models/query-search.dto';
+import { ApiPaginatedResponse } from '@decorators/pagination';
+
 
 @ApiTags('Shops')
 @ApiExtraModels(ModelShop)
@@ -21,9 +24,10 @@ export class ShopsController {
   }
 
   @Get()
-  @ApiOkResponse({ schema: { type: 'array', items: { $ref: getSchemaPath(ModelShop) } } })
-  findAll() {
-    return this.shopsService.findAll();
+  @ApiPaginatedResponse(ModelShop)
+  @ApiQuery({ type: QuerySortDto })
+  findAll(@Query() query: QuerySortDto) {
+    return this.shopsService.findAll(query);
   }
 
   @Get(':id')
