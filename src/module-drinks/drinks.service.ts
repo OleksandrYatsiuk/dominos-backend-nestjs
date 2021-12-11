@@ -53,15 +53,16 @@ export class DrinksService {
   async update(id: string, updateDrinkDto: UpdateDrinkDto) {
     const drink = await this._db.findById(id);
 
-    if (updateDrinkDto.image === null && drink.image) {
-      await this._s3.removeFile(drink.image);
+    if (!drink) {
+      return new NotFoundException('Drink not found');
     }
 
-    if (drink) {
-      return this._db.findByIdAndUpdate(id, { $set: { ...updateDrinkDto, image: updateDrinkDto.image, updatedAt: new Date() } }, { new: true });
-    } else {
-      throw new Error('Drink not found');
+    if (updateDrinkDto.image === null && drink.image) {
+      await this._s3.removeFile(drink.image);
+      drink.image = null;
     }
+
+    return this._db.findByIdAndUpdate(id, { $set: { ...updateDrinkDto, image: drink.image, updatedAt: new Date() } }, { new: true }).exec();
   }
 
   remove(id: string): Promise<any | NotFoundException> {
