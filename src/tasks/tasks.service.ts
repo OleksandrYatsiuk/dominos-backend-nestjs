@@ -14,7 +14,13 @@ export class TasksService {
   }
 
   async create(createTaskDto: CreateTaskDto) {
-    const task = await new this._db({ ...createTaskDto, createdAt: new Date(), updatedAt: new Date() }).save();
+    const lastTask = await this._db.findOne({}, { sort: { createdAt: -1 } });
+    const lastTaskNumber = lastTask ? (Number(lastTask.number.replace(/\\D/, '')) + 1) : 1;
+    createTaskDto.createdAt = new Date();
+    createTaskDto.updatedAt = new Date();
+    createTaskDto.number = `D-${lastTaskNumber}`;
+
+    const task = await new this._db({ ...createTaskDto }).save();
     return new Task(task);
   }
 
