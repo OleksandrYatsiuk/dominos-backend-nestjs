@@ -17,6 +17,9 @@ export class Tasks {
     @Prop({ default: null, type: String, required: true })
     name: string;
 
+    @Prop({ default: null, type: String, required: true })
+    description: string;
+
     @Prop({ default: null })
     date: string;
 

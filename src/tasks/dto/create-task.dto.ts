@@ -8,6 +8,9 @@ export class CreateTaskDto {
     @ApiProperty({ required: false, type: String, default: 'D-1', readOnly: true })
     number: string;
 
+    @ApiProperty({ required: false, type: String, default: '' })
+    description: string;
+
     @ApiProperty({ required: true, type: String, default: '' })
     date: string;
 

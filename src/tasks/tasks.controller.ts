@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, Res, Que
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
-import { ApiExtraModels, ApiNoContentResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiExtraModels, ApiNoContentResponse, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Task } from './entities/task.entity';
 import { Response } from 'express';
 import { EnumImportance, EnumStatus } from './entities/task.enum';
@@ -17,6 +17,7 @@ export class TasksController {
   constructor(private readonly tasksService: TasksService) { }
 
   @Post()
+  @ApiCreatedResponse({ type: Task })
   create(@Body() createTaskDto: CreateTaskDto) {
     return this.tasksService.create(createTaskDto);
   }
@@ -42,11 +43,13 @@ export class TasksController {
   }
 
   @Get(':id')
+  @ApiOkResponse({ type: Task })
   findOne(@Param('id') id: string) {
     return this.tasksService.findOne(id);
   }
 
   @Patch(':id')
+  @ApiOkResponse({ type: Task })
   update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
     return this.tasksService.update(id, updateTaskDto);
   }
