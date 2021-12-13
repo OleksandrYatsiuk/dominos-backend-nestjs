@@ -15,10 +15,10 @@ export class TasksService {
 
   async create(createTaskDto: CreateTaskDto) {
     const lastTask = await this._db.findOne({}).sort({ createdAt: -1 });
-    const lastTaskNumber = lastTask ? (Number(lastTask.number.replace(/[^0-9]/g, '')) + 1) : 1;
+    const lastTaskNumber = lastTask ? (Number(lastTask.issue.replace(/[^0-9]/g, '')) + 1) : 1;
     createTaskDto.createdAt = new Date();
     createTaskDto.updatedAt = new Date();
-    createTaskDto.number = `D-${lastTaskNumber}`;
+    createTaskDto.issue = `D-${lastTaskNumber}`;
 
     const task = await new this._db({ ...createTaskDto }).save();
     return new Task(task);

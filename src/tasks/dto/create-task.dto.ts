@@ -6,7 +6,7 @@ export class CreateTaskDto {
     name: string;
 
     @ApiProperty({ required: false, type: String, default: 'D-1', readOnly: true })
-    number: string;
+    issue: string;
 
     @ApiProperty({ required: false, type: String, default: '' })
     description: string;

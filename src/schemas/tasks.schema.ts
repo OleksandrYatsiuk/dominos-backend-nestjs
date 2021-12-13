@@ -12,7 +12,7 @@ export class Tasks {
     readonly id: mongoose.Types.ObjectId;
 
     @Prop({ default: null, type: String, required: true })
-    number: string;
+    issue: string;
 
     @Prop({ default: null, type: String, required: true })
     name: string;

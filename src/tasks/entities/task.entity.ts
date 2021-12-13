@@ -11,7 +11,7 @@ export class Task implements Partial<TasksDocument> {
     name: string;
 
     @ApiProperty({ required: true, type: String, default: '' })
-    number: string;
+    issue: string;
 
     @ApiProperty({ required: false, type: String, default: '' })
     description: string;
@@ -40,7 +40,7 @@ export class Task implements Partial<TasksDocument> {
         description = null,
         date = null,
         status = null,
-        number = null,
+        issue = null,
         importance = null,
         finishedAt = null,
         createdAt = null,
@@ -51,7 +51,7 @@ export class Task implements Partial<TasksDocument> {
         this.name = name;
         this.date = date;
         this.status = status;
-        this.number = number;
+        this.issue = issue;
         this.description = description;
         this.importance = importance;
         this.finishedAt = finishedAt;
