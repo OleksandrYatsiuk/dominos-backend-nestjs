@@ -33,12 +33,8 @@ export class DrinksService {
     }
   }
 
-  async findAll(query): Promise<PaginatedDto<ModelDrinks[]>> {
-    const drinks = await paginationUtils(this._db, query, {}, query.sort);
-    return {
-      ...drinks,
-      result: drinks.result.map(d => new ModelDrinks(d))
-    };
+  async findAll(query): Promise<PaginatedDto<DrinksDocument[]>> {
+    return await paginationUtils(this._db, query, {}, query.sort);
   }
 
   findOne(id: string): Promise<DrinksDocument> {

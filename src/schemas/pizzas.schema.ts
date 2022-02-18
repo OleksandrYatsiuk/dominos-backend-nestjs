@@ -34,8 +34,8 @@ export class Pizza {
     @Prop({ default: [] })
     ingredients: Array<mongoose.Types.ObjectId>;
 
-    @Prop({ default: 0 })
-    category: number;
+    @Prop({ default: '', ref: 'PizzaStatuses' })
+    categoryId: mongoose.Types.ObjectId;
 
     @Prop({ default: null })
     image: string;

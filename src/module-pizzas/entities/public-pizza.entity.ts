@@ -1,6 +1,6 @@
-import { IItemSizes, ModelSizes } from "@models/item-sizes.model";
-import { ELanguage } from "@models/language.model";
-import { ApiProperty } from "@nestjs/swagger";
+import { IItemSizes, ModelSizes } from '@models/item-sizes.model';
+import { ELanguage } from '@models/language.model';
+import { ApiProperty } from '@nestjs/swagger';
 import * as mongoose from 'mongoose';
 
 export class ModelPizzaPublic {
@@ -21,7 +21,7 @@ export class ModelPizzaPublic {
     size: IItemSizes;
 
     @ApiProperty({ required: true, type: Number, default: 0 })
-    category: number;
+    categoryId: number;
 
     @ApiProperty({ required: false, type: String, default: null })
     image: string;
@@ -36,7 +36,7 @@ export class ModelPizzaPublic {
         _id = null,
         name = null,
         ingredients = [],
-        category = null,
+        categoryId = null,
         image = null,
         createdAt = null,
         price = null,
@@ -48,7 +48,7 @@ export class ModelPizzaPublic {
         this.price = new ModelSizes(price);
         this.size = new ModelSizes(weight);
         this.ingredients = ingredients;
-        this.category = category;
+        this.categoryId = categoryId;
         this.image = image;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;

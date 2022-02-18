@@ -9,7 +9,7 @@ import { DrinksCategory } from "src/enums/drinks.enum";
 export class ModelDrinks implements Partial<DrinksDocument> {
 
     @ApiProperty({ required: false, type: String, readOnly: true })
-    readonly id: string;
+    id: string;
 
     @ApiProperty({ required: true, type: ModelLanguage, default: new ModelLanguage() })
     @Transform(({ value }) => typeof value === 'object' ? value : JSON.parse(value))
@@ -31,10 +31,10 @@ export class ModelDrinks implements Partial<DrinksDocument> {
     size: ModelSizes;
 
     @ApiProperty({ type: Date, default: new Date() })
-    readonly createdAt: Date;
+    createdAt: Date;
 
     @ApiProperty({ type: Date, default: new Date() })
-    readonly updatedAt: Date;
+    updatedAt: Date;
 
     constructor({
         _id = null,

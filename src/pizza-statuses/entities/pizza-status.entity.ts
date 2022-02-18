@@ -5,6 +5,10 @@ import { PizzaStatusDocument } from "@schemas/pizza-statuses.schema";
 import { Transform } from "class-transformer";
 
 export class ModelPizzaStatus implements Partial<PizzaStatusDocument> {
+
+    @ApiProperty({ required: false, type: String, readOnly: true })
+    id: string;
+
     @ApiProperty({ required: true, type: ModelLanguage, default: new ModelLanguage() })
     @Transform(({ value }) => typeof value === 'object' ? value : JSON.parse(value))
     @IsMultiRequired({ each: false })
@@ -14,9 +18,11 @@ export class ModelPizzaStatus implements Partial<PizzaStatusDocument> {
     status: number;
 
     constructor({
+        _id = null,
         name = null,
         status = null
     }) {
+        this.id = _id;
         this.name = name;
         this.status = status;
     }

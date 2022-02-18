@@ -9,6 +9,7 @@ import { CreatePizzaDto } from './dto/create-pizza.dto';
 import { UpdatePizzaDto } from './dto/update-pizza.dto';
 import { ModelPizza } from './entities/pizza.entity';
 import { ModelPizzaPublic } from './entities/public-pizza.entity';
+import { PizzaStatusDocument } from '@schemas/pizza-statuses.schema';
 
 @Injectable()
 export class PizzasService {
@@ -31,11 +32,15 @@ export class PizzasService {
     }
   }
   async findAll(query: any = {}): Promise<PaginatedDto<ModelPizza[]>> {
-    const pizzas = await paginationUtils(this._db, query, {}, query.sort);
+    const pizzas = await paginationUtils(this._db, query, {}, query.sort, 'categoryId');
     return {
       ...pizzas,
-      result: pizzas.result.map(p => new ModelPizza(p))
-    };
+      result: pizzas.result.map((p: any) => {
+        p.category = p.categoryId as PizzaStatusDocument;
+        return new ModelPizza(p);
+      })
+    }
+
   }
   async findAllPublic(query: any = {}): Promise<PaginatedDto<ModelPizzaPublic[]>> {
     const pizzas = await paginationUtils(this._db, query, {}, query.sort);

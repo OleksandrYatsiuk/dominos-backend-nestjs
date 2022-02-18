@@ -2,8 +2,8 @@ import { IsMultiRequired } from '@decorators/validation';
 import { ModelSizes } from '@models/item-sizes.model';
 import { ModelLanguage } from '@models/language.model';
 import { ApiProperty } from '@nestjs/swagger';
-import { Transform, Type } from 'class-transformer';
-import { Max, Min, IsInt, IsMongoId } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { IsMongoId } from 'class-validator';
 import * as mongoose from 'mongoose';
 
 export class CreatePizzaDto {
@@ -13,8 +13,9 @@ export class CreatePizzaDto {
     @IsMultiRequired({ each: false })
     name: ModelLanguage;
 
-    @IsMongoId({ each: true })
     @ApiProperty({ required: true, type: Array, default: [] })
+    @Transform(({ value }: { value: string }) => value.split(',').filter(id => id))
+    @IsMongoId({ each: true })
     ingredients: Array<mongoose.Types.ObjectId>;
 
     @ApiProperty({ type: ModelSizes, default: new ModelSizes() })
@@ -26,12 +27,8 @@ export class CreatePizzaDto {
     size: ModelSizes;
 
 
-    @ApiProperty({ required: true, type: Number, default: 0 })
-    @Type(() => Number)
-    @IsInt()
-    @Min(0)
-    @Max(5)
-    category: number;
+    @ApiProperty({ required: true, type: mongoose.Types.ObjectId, default: 0 })
+    categoryId: mongoose.Types.ObjectId;
 
     @ApiProperty({ required: false, type: String, format: 'binary', default: null })
     image: string;

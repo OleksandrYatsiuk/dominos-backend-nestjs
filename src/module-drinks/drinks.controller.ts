@@ -1,17 +1,23 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, Query, UseInterceptors, UploadedFile, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, Query, UseInterceptors, UploadedFile, HttpStatus, UseGuards } from '@nestjs/common';
 import { DrinksService } from './drinks.service';
 import { CreateDrinkDto } from './dto/create-drink.dto';
 import { UpdateDrinkDto } from './dto/update-drink.dto';
 import { Response, Express } from 'express';
-import { ApiConsumes, ApiCreatedResponse, ApiExtraModels, ApiNoContentResponse, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiConsumes, ApiCreatedResponse, ApiExtraModels, ApiNoContentResponse, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiPaginatedResponse } from '@decorators/pagination';
 import { ModelDrinks } from './entities/drink.entity';
 import { UploadImageDrinkDto } from './dto/upload-file.dto';
 import { QuerySortDto } from '@models/query-search.dto';
+import { AuthGuard } from 'src/guards/auth/auth.guard';
+import { UserRole } from 'src/enums/roles.enum';
+import { Roles } from 'src/guards/roles/roles.decorator';
 
 @ApiTags('Drinks')
 @Controller('drinks')
+@ApiBearerAuth()
+@UseGuards(AuthGuard)
+@Roles(UserRole.ADMIN)
 @ApiExtraModels(ModelDrinks)
 export class DrinksController {
   constructor(private readonly drinksService: DrinksService) { }
@@ -29,7 +35,7 @@ export class DrinksController {
   @ApiQuery({ type: QuerySortDto })
   findAll(@Query() query, @Res() res: Response) {
     this.drinksService.findAll(query)
-      .then(result => res.status(HttpStatus.OK).send(result))
+      .then(response => res.status(HttpStatus.OK).send({ ...response, result: response.result.map(d => new ModelDrinks(d)) }))
   }
 
 
