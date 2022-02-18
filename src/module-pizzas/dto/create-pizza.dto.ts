@@ -14,7 +14,8 @@ export class CreatePizzaDto {
     name: ModelLanguage;
 
     @ApiProperty({ required: true, type: Array, default: [] })
-    @Transform(({ value }: { value: string }) => value.split(',').filter(id => id))
+    @Transform(({ value }: { value: string }) => Array.isArray(value) ? value : value.split(',').filter(id => id)
+    )
     @IsMongoId({ each: true })
     ingredients: Array<mongoose.Types.ObjectId>;
 
