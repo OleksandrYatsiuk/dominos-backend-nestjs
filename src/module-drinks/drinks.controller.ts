@@ -15,14 +15,14 @@ import { Roles } from 'src/guards/roles/roles.decorator';
 
 @ApiTags('Drinks')
 @Controller('drinks')
-@ApiBearerAuth()
-@UseGuards(AuthGuard)
-@Roles(UserRole.ADMIN)
 @ApiExtraModels(ModelDrinks)
 export class DrinksController {
   constructor(private readonly drinksService: DrinksService) { }
 
   @Post()
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  @Roles(UserRole.ADMIN)
   @ApiConsumes('multipart/form-data')
   @ApiCreatedResponse({ type: ModelDrinks })
   @UseInterceptors(FileInterceptor('image'))
@@ -46,12 +46,18 @@ export class DrinksController {
   }
 
   @Patch(':id')
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  @Roles(UserRole.ADMIN)
   @ApiOkResponse({ type: ModelDrinks })
   update(@Param('id') id: string, @Body() updateDrinkDto: UpdateDrinkDto) {
     return this.drinksService.update(id, updateDrinkDto);
   }
 
   @Post(':id/upload')
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  @Roles(UserRole.ADMIN)
   @ApiConsumes('multipart/form-data')
   @ApiOkResponse({ type: ModelDrinks })
   @UseInterceptors(FileInterceptor('file'))
@@ -61,6 +67,9 @@ export class DrinksController {
   }
 
   @Delete(':id')
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  @Roles(UserRole.ADMIN)
   @ApiNoContentResponse()
   remove(@Param('id') id: string, @Res() res: Response) {
     return this.drinksService.remove(id).then(() => res.status(HttpStatus.NO_CONTENT).send());
