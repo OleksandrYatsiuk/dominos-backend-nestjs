@@ -21,8 +21,7 @@ import { TasksModule } from './tasks/tasks.module';
 import { ProductsModule } from './module-products/products.module';
 import { AuthModule } from './module-auth/auth.module';
 import { UsersManagementModule } from './module-users-management/users-management.module';
-import { RolesGuard } from './guards/roles/roles.guard';
-import { AuthGuard } from './guards/auth/auth.guard';
+import { TerritoryModule } from './module-territory/territory.module';
 
 @Module({
   imports: [
@@ -48,7 +47,8 @@ import { AuthGuard } from './guards/auth/auth.guard';
     ShopsModule,
     LanguageModule,
     TasksModule,
-    ProductsModule
+    ProductsModule,
+    TerritoryModule
   ],
   controllers: [],
   exports: [LanguageModule],
