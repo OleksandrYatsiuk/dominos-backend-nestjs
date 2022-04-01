@@ -22,6 +22,7 @@ import { ProductsModule } from './module-products/products.module';
 import { AuthModule } from './module-auth/auth.module';
 import { UsersManagementModule } from './module-users-management/users-management.module';
 import { TerritoryModule } from './module-territory/territory.module';
+import { PostsModule } from './module-posts/posts.module';
 
 @Module({
   imports: [
@@ -48,7 +49,8 @@ import { TerritoryModule } from './module-territory/territory.module';
     LanguageModule,
     TasksModule,
     ProductsModule,
-    TerritoryModule
+    TerritoryModule,
+    PostsModule
   ],
   controllers: [],
   exports: [LanguageModule],
