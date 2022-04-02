@@ -31,8 +31,14 @@ export class PostsService {
 
   }
 
-  async findAll(territoryId: string): Promise<ModelPost[]> {
+  async findAllByTerritory(territoryId: string): Promise<ModelPost[]> {
     const posts = await this._db.find({ territory: territoryId });
+    return posts.map(p => new ModelPost(p._doc));
+  }
+
+
+  async findAll(): Promise<ModelPost[]> {
+    const posts = await this._db.find({});
     return posts.map(p => new ModelPost(p._doc));
   }
 

@@ -27,8 +27,21 @@ export class PostsController {
     }
   })
   @Get(':territoryId')
-  findAll(@Param('territoryId') territoryId: string,) {
-    return this.postsService.findAll(territoryId);
+  findAllByTerritory(@Param('territoryId') territoryId: string,) {
+    return this.postsService.findAllByTerritory(territoryId);
+  }
+
+  @ApiOkResponse({
+    schema: {
+      type: 'array',
+      items: {
+        $ref: getSchemaPath(ModelPost)
+      }
+    }
+  })
+  @Get()
+  findAll() {
+    return this.postsService.findAll();
   }
 
   @ApiOkResponse({ type: ModelPost })
