@@ -12,7 +12,7 @@ export class Post {
     @Prop()
     readonly id: mongoose.Types.ObjectId;
 
-    @Prop({ type: mongoose.Types.ObjectId, required: true, ref: 'Territories' })
+    @Prop({ type: mongoose.Types.ObjectId, required: false, ref: 'Territories' })
     territory: mongoose.Types.ObjectId;
 
     @Prop({ default: EPost.Telegram, type: EPost, enum: [EPost.Facebook, EPost.Telegram, EPost.Twitter], required: true })
