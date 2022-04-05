@@ -5,6 +5,7 @@ import { UpdateTerritoryDto } from './dto/update-territory.dto';
 import { ApiCreatedResponse, ApiExtraModels, ApiNoContentResponse, ApiOkResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
 import { Territory } from './entities/territory.entity';
 import { Response } from 'express';
+import { TerritoryVersionsService } from 'src/module-territory-versions/territory-versions.service';
 
 
 @Controller('territory')
@@ -14,7 +15,8 @@ import { Response } from 'express';
 
 export class TerritoryController {
   constructor(
-    private readonly territoryService: TerritoryService
+    private readonly territoryService: TerritoryService,
+    private readonly territoryVersionService: TerritoryVersionsService
   ) { }
 
   @ApiCreatedResponse({ type: Territory })

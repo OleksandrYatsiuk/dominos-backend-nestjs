@@ -1,23 +1,15 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
+import { Territory } from 'src/module-territory/entities/territory.entity';
 
 
-export type TerritoryDocument = Territories & mongoose.Document & { _doc: Territories };
+export type TerritoryDocument = Territories & mongoose.Document & { _doc: Territory };
 
 @Schema({ versionKey: false })
 export class Territories {
 
-    @Prop()
-    readonly id: mongoose.Types.ObjectId;
-
-    @Prop({ default: null, required: false })
-    name: string;
-
-    @Prop({ required: false, default: [] })
-    coords: Array<number>;
-
-    @Prop({ required: false, default: {} })
-    styles: string;
+    // @Prop({})
+    // readonly id: mongoose.Types.ObjectId;
 
     @Prop({ default: Date })
     createdAt: Date;

@@ -1,14 +1,19 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { TerritoryDocument } from "@schemas/territory.schema";
-import { ModelTerritoryVersion } from "src/module-territory-versions/entities/territory-version.entity";
 
-export class Territory implements Partial<TerritoryDocument> {
+export class ModelTerritoryVersion {
+
 
     @ApiProperty({ required: false, type: String, readOnly: true })
     id: string;
 
-    @ApiProperty({ required: false, type: ModelTerritoryVersion })
-    details: ModelTerritoryVersion;
+    @ApiProperty({ required: false, type: String })
+    name: string;
+
+    @ApiProperty({ required: false, type: Array })
+    coords: number[];
+
+    @ApiProperty({ required: false })
+    styles: any;
 
     @ApiProperty({ type: Number, default: new Date() })
     createdAt: Date;
@@ -18,14 +23,17 @@ export class Territory implements Partial<TerritoryDocument> {
 
     constructor({
         _id = null,
-        details = null,
+        name = null,
+        coords = [],
+        styles = '{}',
         createdAt = null,
         updatedAt = null
     }) {
         this.id = _id;
-        this.details = details;
+        this.name = name;
+        this.coords = coords;
+        this.styles = JSON.parse(styles);
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
-
 }

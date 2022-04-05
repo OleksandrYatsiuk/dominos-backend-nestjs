@@ -10,7 +10,7 @@ import { IngredientsModule } from './module-ingredients/ingredients.module';
 import { ShopsModule } from './module-shops/shops.module';
 import * as path from 'path';
 import { I18nModule, I18nJsonParser } from 'nestjs-i18n';
-import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { ValidationFilter } from './filters/validation.filter';
 import { AllExceptionsFilter } from './filters/all-exception';
 import { ELanguage } from '@models/language.model';
@@ -23,6 +23,7 @@ import { AuthModule } from './module-auth/auth.module';
 import { UsersManagementModule } from './module-users-management/users-management.module';
 import { TerritoryModule } from './module-territory/territory.module';
 import { PostsModule } from './module-posts/posts.module';
+import { TerritoryVersionsModule } from './module-territory-versions/territory-versions.module';
 
 @Module({
   imports: [
@@ -50,7 +51,8 @@ import { PostsModule } from './module-posts/posts.module';
     TasksModule,
     ProductsModule,
     TerritoryModule,
-    PostsModule
+    PostsModule,
+    TerritoryVersionsModule
   ],
   controllers: [],
   exports: [LanguageModule],
