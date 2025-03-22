@@ -33,7 +33,7 @@ export class ModelPromotion implements Partial<PromotionsDocument> {
         updatedAt = null,
         createdAt = null
     }: Partial<PromotionsDocument> = {}) {
-        this.id = _id;
+        this.id = _id as string;
         this.name = name;
         this.description = description;
         this.image = image;

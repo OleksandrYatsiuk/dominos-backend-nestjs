@@ -32,7 +32,7 @@ export class AuthService {
     }
 
     const user = await this._createUser(data);
-    await this._createPasswordToken(data.password, user._id);
+    await this._createPasswordToken(data.password, user.id);
     return user;
   }
 

@@ -23,11 +23,11 @@ export class TerritoryVersionsService {
   }
 
   async getLastVersion(territoryId: string): Promise<ModelTerritoryVersion> {
-    const territoryData = await this._db.findOne({ territory: Types.ObjectId(territoryId) }).sort({ updatedAt: -1 });
+    const territoryData = await this._db.findOne({ territory: new Types.ObjectId(territoryId) }).sort({ updatedAt: -1 });
     return new ModelTerritoryVersion(territoryData);
   }
 
   removeAllVersions(territoryId: string): Promise<any> {
-    return this._db.deleteMany({ territory: Types.ObjectId(territoryId) }).exec();
+    return this._db.deleteMany({ territory: new Types.ObjectId(territoryId) }).exec();
   }
 }

@@ -25,7 +25,7 @@ export class Drinks {
     @Prop({ type: ModelSizes, default: new ModelSizes(), required: true })
     size: ModelSizes;
 
-    @Prop({ type: DrinksCategory, default: null, required: true })
+    @Prop({ type: Number, default: null, required: true })
     category: DrinksCategory;
 
     @Prop({ default: Date })

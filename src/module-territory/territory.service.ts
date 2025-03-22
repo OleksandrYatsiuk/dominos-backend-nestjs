@@ -23,13 +23,13 @@ export class TerritoryService {
 
     const territoryDocument = await new this._db({ ...createTerritoryDto }).save();
 
-    const territoryDataVersion = await this._territoryVersionService.appendData({ ...createTerritoryDto, territory: territoryDocument._id });
+    const territoryDataVersion = await this._territoryVersionService.appendData({ ...createTerritoryDto, territory: territoryDocument._id as string });
     return new Territory({ ...territoryDocument._doc, details: territoryDataVersion });
   }
 
   async findAll(): Promise<Territory[]> {
     const territories = await this._db.find({});
-    const territoriesVersions = Promise.all(territories.map((async (t) => new Territory({ ...t._doc, details: await this._territoryVersionService.getLastVersion(t._id) }))));
+    const territoriesVersions = Promise.all(territories.map((async (t) => new Territory({ ...t._doc, details: await this._territoryVersionService.getLastVersion(t._id as string) }))));
     return territoriesVersions;
   }
 
@@ -42,7 +42,7 @@ export class TerritoryService {
 
     updateTerritoryDto.updatedAt = new Date();
     const territory = await this._db.findByIdAndUpdate(id, { $set: { updatedAt: new Date() } }, { new: true });
-    const territoryDataVersion = await this._territoryVersionService.appendData({ ...updateTerritoryDto, territory: territory._id });
+    const territoryDataVersion = await this._territoryVersionService.appendData({ ...updateTerritoryDto, territory: territory._id as string });
 
     return new Territory({ ...territory, details: territoryDataVersion });
   }

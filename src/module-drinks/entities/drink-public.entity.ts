@@ -20,7 +20,7 @@ export class ModelDrinkPublic extends OmitType(ModelDrinks, ['name']) {
         createdAt = null
     }: Partial<DrinksDocument> = {}, lang: ELanguage) {
         super();
-        this.id = _id;
+        this.id = _id as string;
         this.name = name[lang];
         this.category = category;
         this.price = new ModelSizes(price);

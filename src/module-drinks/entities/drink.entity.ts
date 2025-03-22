@@ -46,7 +46,7 @@ export class ModelDrinks implements Partial<DrinksDocument> {
         updatedAt = null,
         createdAt = null
     }: Partial<DrinksDocument> = {}) {
-        this.id = _id;
+        this.id = _id as string;
         this.name = name;
         this.category = category;
         this.price = new ModelSizes(price);

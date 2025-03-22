@@ -14,7 +14,7 @@ import { QuerySortDto } from '@models/query-search.dto';
 @ApiBearerAuth()
 @UseGuards(AuthGuard, RolesGuard)
 @ApiUnauthorizedResponse()
-@Roles(UserRole.ADMIN)
+@Roles(UserRole.Administrator)
 @Controller('users-management')
 @ApiTags('Users Management')
 export class UsersManagementController {

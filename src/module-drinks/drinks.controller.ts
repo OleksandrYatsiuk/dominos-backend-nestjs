@@ -22,7 +22,7 @@ export class DrinksController {
   @Post()
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.Administrator)
   @ApiConsumes('multipart/form-data')
   @ApiCreatedResponse({ type: ModelDrinks })
   @UseInterceptors(FileInterceptor('image'))
@@ -48,7 +48,7 @@ export class DrinksController {
   @Patch(':id')
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.Administrator)
   @ApiOkResponse({ type: ModelDrinks })
   update(@Param('id') id: string, @Body() updateDrinkDto: UpdateDrinkDto) {
     return this.drinksService.update(id, updateDrinkDto);
@@ -57,7 +57,7 @@ export class DrinksController {
   @Post(':id/upload')
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.Administrator)
   @ApiConsumes('multipart/form-data')
   @ApiOkResponse({ type: ModelDrinks })
   @UseInterceptors(FileInterceptor('file'))
@@ -69,7 +69,7 @@ export class DrinksController {
   @Delete(':id')
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.Administrator)
   @ApiNoContentResponse()
   remove(@Param('id') id: string, @Res() res: Response) {
     return this.drinksService.remove(id).then(() => res.status(HttpStatus.NO_CONTENT).send());

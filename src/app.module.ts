@@ -9,7 +9,7 @@ import { PromotionsModule } from './module-promotions/promotions.module';
 import { IngredientsModule } from './module-ingredients/ingredients.module';
 import { ShopsModule } from './module-shops/shops.module';
 import * as path from 'path';
-import { I18nModule, I18nJsonParser } from 'nestjs-i18n';
+import { I18nModule } from 'nestjs-i18n';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { ValidationFilter } from './filters/validation.filter';
 import { AllExceptionsFilter } from './filters/all-exception';
@@ -31,12 +31,10 @@ import { TerritoryVersionsModule } from './module-territory-versions/territory-v
     MongooseModule.forRootAsync({ useClass: MongooseConfigService }),
     I18nModule.forRoot({
       fallbackLanguage: ELanguage.uk,
-      parser: I18nJsonParser,
-      parserOptions: {
+      loaderOptions: {
         path: path.join(__dirname, '/i18n/'),
         watch: true,
       },
-
     }),
     AuthModule,
     UsersModule,

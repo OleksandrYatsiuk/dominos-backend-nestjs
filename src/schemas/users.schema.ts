@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import * as mongoose from 'mongoose';
+import mongoose from 'mongoose';
 import { UserRole } from 'src/enums/roles.enum';
 
 
@@ -23,7 +23,7 @@ export class User {
     @Prop({ required: true, type: String })
     email: string;
 
-    @Prop({ required: true, type: UserRole, enum: [UserRole.ADMIN, UserRole.BUYER], default: UserRole.BUYER })
+    @Prop({ required: true, type: String, enum: [UserRole.Administrator, UserRole.Buyer], default: UserRole.Buyer })
     role: UserRole;
 
     @Prop({ default: null })

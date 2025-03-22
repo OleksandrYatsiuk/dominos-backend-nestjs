@@ -15,7 +15,7 @@ export class ModelUser {
     username: string;
     @ApiProperty({ type: String, required: true })
     email: string;
-    @ApiProperty({ type: String, required: true, enum: [UserRole.BUYER, UserRole.ADMIN], default: UserRole.BUYER })
+    @ApiProperty({ type: String, required: true, enum: UserRole, default: UserRole.Buyer })
     role: UserRole;
     @ApiProperty({ type: Date, required: false })
     birthday: Date;
@@ -40,7 +40,7 @@ export class ModelUser {
         lastName = null,
         username = null,
         email = null,
-        role = UserRole.BUYER,
+        role = UserRole.Buyer,
         birthday = null,
         phone = null,
         image = null,
@@ -49,7 +49,7 @@ export class ModelUser {
         createdAt = new Date(),
         updatedAt = new Date(),
     }: Partial<UsersDocument>) {
-        this.id = _id;
+        this.id = _id as any;
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;

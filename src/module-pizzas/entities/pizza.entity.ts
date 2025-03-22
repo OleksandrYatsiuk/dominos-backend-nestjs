@@ -6,7 +6,7 @@ import { PizzaDocument } from "@schemas/pizzas.schema";
 import * as mongoose from 'mongoose';
 import { ModelPizzaStatus } from "src/pizza-statuses/entities/pizza-status.entity";
 
-export class ModelPizza implements Partial<PizzaDocument>{
+export class ModelPizza implements Partial<PizzaDocument> {
 
     @ApiProperty({ required: false, type: String, readOnly: true })
     id: string;
@@ -50,12 +50,12 @@ export class ModelPizza implements Partial<PizzaDocument>{
         size = new ModelSizes(),
         updatedAt = null
     }: Partial<PizzaDocument & { category?: PizzaStatusDocument }> = {}) {
-        this.id = _id;
+        this.id = _id as string;
         this.name = name;
         this.price = new ModelSizes(price);
         this.size = new ModelSizes(size);
         this.ingredients = ingredients;
-        this.categoryId = category?._id || categoryId;
+        this.categoryId = (category?._id as any) || categoryId;
         if (category) {
             this.category = new ModelPizzaStatus(category);
         }

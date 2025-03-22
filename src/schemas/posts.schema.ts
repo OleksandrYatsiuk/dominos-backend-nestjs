@@ -15,7 +15,7 @@ export class Post {
     @Prop({ type: mongoose.Types.ObjectId, required: false, ref: 'Territories' })
     territory: mongoose.Types.ObjectId;
 
-    @Prop({ default: EPost.Telegram, type: EPost, enum: [EPost.Facebook, EPost.Telegram, EPost.Twitter], required: true })
+    @Prop({ default: EPost.Telegram, type: String, enum: [EPost.Facebook, EPost.Telegram, EPost.Twitter], required: true })
     type: EPost;
 
     @Prop({ default: '' })

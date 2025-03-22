@@ -4,7 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { ShopsDocument } from '@schemas/shops.schema';
 
 
-export class ModelShop implements Partial<ShopsDocument>{
+export class ModelShop implements Partial<ShopsDocument> {
 
     @ApiProperty({ required: false, type: String, readOnly: true })
     id: string
@@ -32,7 +32,7 @@ export class ModelShop implements Partial<ShopsDocument>{
         createdAt = null,
         updatedAt = null
     }: Partial<ShopsDocument> = {}) {
-        this.id = _id;
+        this.id = _id as string;
         this.coords = new ModelCoords(coords);
         this.address = new ModelLanguage(address);
         this.image = image;
